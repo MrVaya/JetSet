@@ -1,29 +1,44 @@
-import SearchTabs from "./SearchTabs";
+import Link from "next/link";
+import { Search } from "lucide-react";
+import HeroSearch from "./HeroSearch";
 
 export default function Hero() {
     return (
-        <section className="relative h-[90vh] w-full flex items-center justify-center">
-            {/* Background Image Overlay */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-black/50 z-10" /> {/* Dark overlay for readability */}
-                <img
-                    src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80"
-                    className="w-full h-full object-cover"
-                    alt="Premium Travel"
-                />
-            </div>
+        <section className="px-3 md:px-6 pt-24 md:pt-6">
+            <div className="relative h-[65vh] md:h-[85vh] w-full rounded-3xl md:rounded-[3.5rem] overflow-hidden flex items-center justify-center">
 
-            <div className="relative z-20 text-center text-white max-w-4xl px-4">
-                <h1 className="text-5xl md:text-7xl font-bold mb-6 italic tracking-tight">
-                    Luxury Travel, <span className="text-emerald-500">Redefined.</span>
-                </h1>
-                <p className="text-lg md:text-xl text-gray-200 mb-10">
-                    Premium flights and elite vehicle rentals for the modern traveler.
-                </p>
+                {/* 1. THE BACKGROUND IMAGE */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80"
+                        className="w-full h-full object-cover"
+                        alt="Hero Background"
+                    />
+                    {/* Dark overlay for text readability */}
+                    <div className="absolute inset-0 bg-black/30" />
+                </div>
 
-                {/* The Search Bar Component */}
-                <div className="bg-white/10 backdrop-blur-xl p-2 rounded-2xl border border-white/20 shadow-2xl">
-                    <SearchTabs />
+                {/* 2. THE CONTENT */}
+                <div className="relative z-10 text-center text-white max-w-5xl px-4 flex flex-col items-center">
+
+                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-8 md:mb-12 tracking-tight leading-tight">
+                        Don't call it a dream. <br className="hidden md:block" /> Call it a plan
+                    </h1>
+
+                    {/* Mobile Only: Simple Search CTA */}
+                    <div className="w-full md:hidden flex justify-center">
+                        <Link href="/ticketing">
+                            <button className="bg-[#079d9a] text-white px-8 py-4 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 shadow-2xl">
+                                <Search className="w-4 h-4" /> FIND A FLIGHT
+                            </button>
+                        </Link>
+                    </div>
+
+                    {/* 3. THE SEARCH BAR (Modular Component) hidden on mobile */}
+                    <div className="w-full hidden md:block">
+                        <HeroSearch />
+                    </div>
+
                 </div>
             </div>
         </section>

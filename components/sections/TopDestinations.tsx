@@ -1,0 +1,100 @@
+"use client";
+
+import React, { useState } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, ChevronRight, ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const destinations = [
+    { id: 1, name: "Phuket", country: "Thailand", img: "https://images.unsplash.com/photo-1589394815804-964ed9be2eb3?auto=format&fit=crop&q=80", visitors: 12 },
+    { id: 2, name: "Santorini", country: "Greece", img: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&q=80", visitors: 18 },
+    { id: 3, name: "Paris", country: "France", img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80", visitors: 25 },
+    { id: 4, name: "Dubai", country: "UAE", img: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&q=80", visitors: 30 },
+    { id: 5, name: "Bali", country: "Indonesia", img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80", visitors: 15 },
+];
+
+export default function TopDestinations() {
+    const [index, setIndex] = useState(0);
+
+    // Logic to slide
+    const nextStep = () => {
+        if (index < destinations.length - 2) setIndex(index + 1);
+    };
+
+    const prevStep = () => {
+        if (index > 0) setIndex(index - 1);
+    };
+
+    return (
+        <section className="py-24 px-6 overflow-hidden bg-slate-50/50">
+            <div className="max-w-7xl mx-auto">
+                {/* HEADER SECTION */}
+                <div className="flex justify-between items-end mb-12">
+                    <div>
+                        <span className="text-[#2a6a62] font-bold text-xs uppercase tracking-widest">Top Destinations</span>
+                        <h2 className="text-4xl font-bold text-slate-900 mt-2">Discover your love</h2>
+                    </div>
+                    <div className="flex gap-4 items-center">
+                        <Button variant="outline" className="border-slate-300 rounded-lg px-6">See all</Button>
+                        {/* Custom Navigation Arrows */}
+                        <div className="flex gap-2">
+                            <button onClick={prevStep} className="p-2 rounded-full border border-slate-200 hover:bg-slate-50 disabled:opacity-30" disabled={index === 0}>
+                                <ChevronLeft className="h-5 w-5 text-slate-600" />
+                            </button>
+                            <button onClick={nextStep} className="p-2 rounded-full border border-slate-200 hover:bg-slate-50 disabled:opacity-30" disabled={index >= destinations.length - 2}>
+                                <ChevronRight className="h-5 w-5 text-slate-600" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* SLIDER CONTAINER */}
+                <div className="relative">
+                    <motion.div
+                        className="flex gap-8"
+                        animate={{ x: `calc(-${index * 38}%)` }} // Controls the "Peek" percentage
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    >
+                        {destinations.map((item) => (
+                            <motion.div
+                                key={item.id}
+                                className="min-w-[45%] md:min-w-[35%] lg:min-w-[28%] bg-white rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 p-2 md:p-4 pb-4 md:pb-8 flex-shrink-0"
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                {/* IMAGE */}
+                                <div className="relative h-48 md:h-72 w-full rounded-2xl md:rounded-[2rem] overflow-hidden mb-4 md:mb-6">
+                                    <Image src={item.img} alt={item.name} fill className="object-cover" />
+                                </div>
+
+                                {/* CONTENT */}
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center px-2 gap-2">
+                                    <div>
+                                        <h4 className="text-lg md:text-2xl font-bold text-[#1a3b3a] mb-1">{item.name}</h4>
+                                        <div className="flex items-center gap-1 text-slate-400">
+                                            <MapPin className="h-3 w-3 md:h-4 md:w-4" />
+                                            <span className="text-xs md:text-sm font-medium">{item.country}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* AVATAR STACK */}
+                                    <div className="flex -space-x-2 md:-space-x-3 mt-2 md:mt-0">
+                                        <div className="h-6 w-6 md:h-10 md:w-10 rounded-full border-2 border-white overflow-hidden bg-slate-200">
+                                            <img src={`https://i.pravatar.cc/150?u=${item.id}`} className="object-cover" alt="user" />
+                                        </div>
+                                        <div className="h-6 w-6 md:h-10 md:w-10 rounded-full border-2 border-white overflow-hidden bg-slate-200">
+                                            <img src={`https://i.pravatar.cc/150?u=${item.id + 10}`} className="object-cover" alt="user" />
+                                        </div>
+                                        <div className="h-6 w-6 md:h-10 md:w-10 rounded-full border-2 border-white bg-[#ff7c7c] flex items-center justify-center text-white text-[8px] md:text-xs font-bold">
+                                            +{item.visitors}
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
+            </div>
+        </section>
+    );
+}
