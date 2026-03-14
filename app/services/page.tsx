@@ -24,7 +24,7 @@ export default async function ServicesPage({
     });
 
     return (
-        <main className="min-h-screen bg-white pt-32 pb-20 px-6">
+        <main className="min-h-screen bg-white pt-36 pb-20 px-6">
             <div className="max-w-7xl mx-auto">
 
                 {/* Search Header Summary */}
@@ -73,8 +73,8 @@ export default async function ServicesPage({
                                     <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                         Instant Booking
                                     </div>
-                                    <a 
-                                        href={`https://api.whatsapp.com/send?phone=9779848387433&text=${encodeURIComponent(`*Booking Inquiry*\n*Package:* ${trip.title}\n*Duration:* ${trip.duration}`)}`}
+                                    <a
+                                        href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Booking Inquiry*\n*Package:* ${trip.title}\n*Duration:* ${trip.duration}`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >

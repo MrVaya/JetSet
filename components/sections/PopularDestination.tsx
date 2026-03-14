@@ -5,46 +5,46 @@ import Link from "next/link";
 
 const DESTINATIONS = [
     {
-        title: "Dubai, UAE",
-        desc: "Experience the pinnacle of luxury and modern architecture.",
+        title: "Pokhara, Nepal",
+        desc: "The city of lakes and gateway to the Annapurna adventure.",
 
-        img: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&q=80",
-        link: "/services?location=dubai"
+        img: "/pokhara.jpg",
+        link: "/services?location=pokhara"
     },
     {
-        title: "Maldives",
-        desc: "Escape to crystal clear waters and private island villas.",
+        title: "Manang Valley",
+        desc: "High altitude desert landscape with ancient Tibetan culture.",
 
-        img: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80",
-        link: "/services?location=maldives"
+        img: "/Winter.jpeg",
+        link: "/services?location=manang"
     },
     {
-        title: "Paris, France",
-        desc: "The city of lights, fashion, and timeless romance.",
+        title: "Rara Lake, Nepal",
+        desc: "The largest and deepest freshwater lake in the Nepal Himalayas.",
 
-        img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80",
-        link: "/services?location=paris"
+        img: "/Rara-Lake.jpg",
+        link: "/services?location=rara"
     },
     {
-        title: "Bali, Indonesia",
-        desc: "Unwind in tropical paradise and ancient cultural spirit.",
+        title: "Illam, Nepal",
+        desc: "Lush green tea gardens and rolling hills in the far eastern Nepal.",
 
-        img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80",
-        link: "/services?location=bali"
+        img: "/Illam.jpg",
+        link: "/services?location=illam"
     },
     {
-        title: "Swiss Alps",
-        desc: "Majestic snow peaks and world-class luxury ski resorts.",
+        title: "Everest, Nepal",
+        desc: "Stand at the top of the world with our exclusive trekking packages.",
 
-        img: "https://images.unsplash.com/photo-1531310197839-ccf54634509e?auto=format&fit=crop&q=80",
-        link: "/services?location=switzerland"
+        img: "/Namche-bazar.jpg",
+        link: "/services?location=everest"
     },
     {
-        title: "New York, USA",
-        desc: "The concrete jungle where executive dreams are made.",
+        title: "Upper Mustang, Nepal",
+        desc: "Explore the forbidden kingdom and its mystic desert landscapes.",
 
-        img: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&q=80",
-        link: "/services?location=newyork"
+        img: "/upper mustang.jpg",
+        link: "/services?location=mustang"
     }
 ];
 
@@ -108,7 +108,7 @@ export default function PopularDestinations() {
                         </div>
 
                         <a
-                            href={`https://api.whatsapp.com/send?phone=9779848387433&text=${encodeURIComponent(`*Booking Inquiry*\n*Destination:* ${item.title}`)}`}
+                            href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Booking Inquiry*\n*Destination:* ${item.title}`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-full"

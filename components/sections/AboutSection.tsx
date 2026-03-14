@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 const stats = [
-    { label: "Flight Destinations", val: "150+" },
-    { label: "Hotels", val: "250+" },
-    { label: "Elite Transportation", val: "80" },
-    { label: "We help to find your dream place", val: "40+" },
+    { label: "Flight Destinations", val: "50+" },
+
+    { label: "Elite Transportation", val: "10" },
+    { label: "We help to find your dream place", val: "60+" },
 ];
 
 export default function AboutSection() {

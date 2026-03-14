@@ -7,11 +7,14 @@ import { MapPin, ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const destinations = [
-    { id: 1, name: "Phuket", country: "Thailand", img: "https://images.unsplash.com/photo-1589394815804-964ed9be2eb3?auto=format&fit=crop&q=80", visitors: 12 },
-    { id: 2, name: "Santorini", country: "Greece", img: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&q=80", visitors: 18 },
-    { id: 3, name: "Paris", country: "France", img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80", visitors: 25 },
-    { id: 4, name: "Dubai", country: "UAE", img: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&q=80", visitors: 30 },
-    { id: 5, name: "Bali", country: "Indonesia", img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80", visitors: 15 },
+    { id: 1, name: "Lumbini", country: "Nepal", img: "/lumbini.jpg", visitors: 10 },
+    { id: 2, name: "Chitwan National Park", country: "Nepal", img: "/chitwan.jpg", visitors: 18 },
+    { id: 3, name: "Paris", country: "France", img: "/paris.jpg", visitors: 25 },
+    { id: 4, name: "Dubai", country: "UAE", img: "/dubai.jpg", visitors: 30 },
+    { id: 5, name: "Bali", country: "Indonesia", img: "/bali.jpg", visitors: 15 },
+    { id: 6, name: "Pokhara", country: "Nepal", img: "/pokhara.jpg", visitors: 10 },
+    { id: 7, name: "Ghandruk ", country: "Nepal", img: "/Ghandruk.jpg", visitors: 10 },
+
 ];
 
 export default function TopDestinations() {

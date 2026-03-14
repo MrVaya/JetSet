@@ -27,7 +27,7 @@ export default async function TicketingPage({
     const destCity = destCode ? AIRPORTS.find(a => a.id === destCode)?.city : "Anywhere";
 
     return (
-        <main className="min-h-screen bg-slate-50 pt-32 pb-20 px-6">
+        <main className="min-h-screen bg-slate-50 pt-36 pb-20 px-6">
             <div className="max-w-5xl mx-auto">
 
                 {/* Search Header Summary */}
@@ -55,21 +55,28 @@ export default async function TicketingPage({
                     </div>
                 )}
 
-                {/* Flights List */}
                 <div className="space-y-6">
                     {filteredFlights.map((flight) => (
                         <div key={flight.id} className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 hover:shadow-2xl hover:border-[#079d9a]/20 transition-all duration-300">
+                            {/* Airline Name Header */}
+                            <div className="flex items-center gap-2 mb-6 ml-1">
+                                <Plane className="w-4 h-4 text-[#079d9a]" />
+                                <span className="text-sm font-black text-slate-900 uppercase tracking-tighter">{flight.airline}</span>
+                            </div>
+
                             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
 
-                                {/* Airline & Times */}
+                                {/* Times & Cities */}
                                 <div className="flex-1 flex items-center justify-between w-full">
                                     <div className="flex items-center gap-4">
                                         <div className="h-14 w-14 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
-                                            <Plane className="h-6 w-6 text-slate-300" />
+                                            <div className="text-[#079d9a] font-bold text-xs">{flight.fromCode}</div>
                                         </div>
                                         <div>
                                             <p className="font-bold text-slate-900 text-lg">{flight.departureTime}</p>
-                                            <p className="text-xs font-semibold text-slate-400 uppercase">{flight.fromCode}</p>
+                                            <p className="text-xs font-semibold text-slate-400 uppercase">
+                                                {AIRPORTS.find(a => a.id === flight.fromCode)?.city || flight.fromCode}
+                                            </p>
                                         </div>
                                     </div>
 
@@ -86,9 +93,16 @@ export default async function TicketingPage({
                                         <span className="text-[10px] font-bold text-[#079d9a] mt-2 uppercase tracking-widest">{flight.stops}</span>
                                     </div>
 
-                                    <div className="text-right">
-                                        <p className="font-bold text-slate-900 text-lg">{flight.arrivalTime}</p>
-                                        <p className="text-xs font-semibold text-slate-400 uppercase">{flight.toCode}</p>
+                                    <div className="text-right flex items-center gap-4">
+                                        <div>
+                                            <p className="font-bold text-slate-900 text-lg">{flight.arrivalTime}</p>
+                                            <p className="text-xs font-semibold text-slate-400 uppercase">
+                                                {AIRPORTS.find(a => a.id === flight.toCode)?.city || flight.toCode}
+                                            </p>
+                                        </div>
+                                        <div className="h-14 w-14 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+                                            <div className="text-[#079d9a] font-bold text-xs">{flight.toCode}</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -101,8 +115,8 @@ export default async function TicketingPage({
                                         <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest text-left md:text-right mb-1">From</p>
                                         <p className="text-2xl font-black text-[#079d9a]">{flight.price}</p>
                                     </div>
-                                    <a 
-                                        href={`https://api.whatsapp.com/send?phone=9779848387433&text=${encodeURIComponent(`*Flight Inquiry*\n*From:* ${flight.fromCode}\n*To:* ${flight.toCode}\n*Airline:* ${flight.airline}\n*Time:* ${flight.departureTime}`)}`}
+                                    <a
+                                        href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Flight Inquiry*\n*From:* ${flight.fromCode}\n*To:* ${flight.toCode}\n*Airline:* ${flight.airline}\n*Time:* ${flight.departureTime}`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
@@ -115,7 +129,7 @@ export default async function TicketingPage({
 
                             {/* Tags */}
                             <div className="mt-6 pt-4 border-t border-slate-50 flex gap-3 text-xs font-semibold text-slate-500">
-                                <span className="bg-slate-50 px-3 py-1 rounded-md">{flight.airline}</span>
+                                <span className="bg-[#079d9a]/5 text-[#079d9a] px-3 py-1 rounded-md">{flight.airline}</span>
                                 <span className="bg-slate-50 px-3 py-1 rounded-md">{seatClass}</span>
                                 <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-md">Baggage included</span>
                             </div>
