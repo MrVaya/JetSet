@@ -12,7 +12,7 @@ export default function CTA() {
                     <Button className="bg-white text-[#0a1f1e] hover:bg-gray-100 h-14 px-10 text-lg font-bold rounded-full transition-transform hover:scale-105">
                         Book a Flight
                     </Button>
-                    <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 h-14 px-10 text-lg font-bold rounded-full transition-transform hover:scale-105">
+                    <Button variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white/10 h-14 px-10 text-lg font-bold rounded-full transition-transform hover:scale-105">
                         Rent a Vehicle
                     </Button>
                 </div>

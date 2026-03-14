@@ -1,20 +1,25 @@
-import { AIRPORTS, FLIGHTS } from "@/libs/data";
-import { Plane, Calendar, Users, MapPin, Clock, ArrowRight } from "lucide-react";
-import Image from "next/image";
+"use client";
 
-export default async function TicketingPage({
+import { AIRPORTS, FLIGHTS } from "@/libs/data";
+import { Plane, Calendar, Users, MapPin, Clock, ArrowRight, ShieldCheck, Briefcase, Coffee, MessageCircle } from "lucide-react";
+import Image from "next/image";
+import React, { use } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+export default function TicketingPage({
     searchParams,
 }: {
     searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
-    const params = await searchParams;
+    const params = use(searchParams);
 
     // Extract data from URL
     const originCode = params.origin;
     const destCode = params.destination;
     const travelerCount = params.travelers || "1";
     const seatClass = params.class || "Economy";
-    const date = params.date ? new Date(params.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "Any Date";
+    const dateStr = params.date ? new Date(params.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "Any Date";
 
     // Filtering Logic
     const filteredFlights = FLIGHTS.filter(flight => {
@@ -26,125 +31,190 @@ export default async function TicketingPage({
     const originCity = originCode ? AIRPORTS.find(a => a.id === originCode)?.city : "Anywhere";
     const destCity = destCode ? AIRPORTS.find(a => a.id === destCode)?.city : "Anywhere";
 
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemAnim = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 }
+    };
+
     return (
-        <main className="min-h-screen bg-slate-50 pt-36 pb-20 px-6">
-            <div className="max-w-5xl mx-auto">
+        <main className="min-h-screen bg-slate-50/50 pt-36 pb-20 px-4 md:px-6">
+            <div className="max-w-6xl mx-auto">
 
                 {/* Search Header Summary */}
-                <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 p-8 mb-8 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div>
-                        <h1 className="text-3xl font-bold text-slate-900 mb-2">Flight Tickets</h1>
-                        <div className="flex flex-wrap gap-4 text-slate-500 text-sm font-semibold">
-                            <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-[#079d9a]" /> {originCity} to {destCity}</span>
-                            <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-[#079d9a]" /> {date}</span>
-                            <span className="flex items-center gap-1.5"><Users className="w-4 h-4 text-[#079d9a]" /> {travelerCount} Travelers</span>
-                            <span className="flex items-center gap-1.5"><Plane className="w-4 h-4 text-[#079d9a]" /> {seatClass}</span>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="relative overflow-hidden bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 p-6 md:p-10 mb-8 md:mb-10"
+                >
+                    <div className="absolute top-0 right-0 w-32 h-32 md:w-64 md:h-64 bg-[#079d9a]/5 rounded-full -mr-10 -mt-10 md:-mr-20 md:-mt-20 blur-2xl md:blur-3xl" />
+                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-8">
+                        <div>
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#079d9a]/10 text-[#079d9a] rounded-full text-[10px] font-bold uppercase tracking-widest mb-3 md:mb-4">
+                                <Plane className="w-3 h-3" /> Results
+                            </div>
+                            <h1 className="text-2xl md:text-4xl font-black text-slate-900 mb-3 md:mb-4 tracking-tight leading-tight">
+                                {originCity} <span className="text-[#079d9a]">→</span> {destCity}
+                            </h1>
+                            <div className="flex flex-wrap gap-3 md:gap-6 text-slate-500 text-[10px] md:text-sm font-bold">
+                                <span className="flex items-center gap-1.5 md:gap-2 bg-slate-50 px-3 md:px-4 py-1.5 md:py-2 rounded-xl border border-slate-100"><Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#079d9a]" /> {dateStr}</span>
+                                <span className="flex items-center gap-1.5 md:gap-2 bg-slate-50 px-3 md:px-4 py-1.5 md:py-2 rounded-xl border border-slate-100"><Users className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#079d9a]" /> {travelerCount}</span>
+                                <span className="flex items-center gap-1.5 md:gap-2 bg-slate-50 px-3 md:px-4 py-1.5 md:py-2 rounded-xl border border-slate-100"><ShieldCheck className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#079d9a]" /> {seatClass}</span>
+                            </div>
+                        </div>
+                        <div className="hidden md:block text-right">
+                            <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Found Deals</p>
+                            <p className="text-6xl font-black text-[#079d9a]">{filteredFlights.length}</p>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
-                {/* Sort / Filter Bar */}
+                {/* Desktop Sorting Bar */}
                 {filteredFlights.length > 0 && (
-                    <div className="flex justify-between items-center mb-6 px-2">
-                        <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">{filteredFlights.length} Flights Found</span>
-                        <select className="bg-white border outline-none border-slate-200 rounded-lg px-4 py-2 text-sm font-semibold text-slate-700">
-                            <option>Cheapest First</option>
-                            <option>Fastest First</option>
-                            <option>Earliest Take-off</option>
-                        </select>
+                    <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-8 px-2 md:px-4 gap-4">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#079d9a] animate-pulse" />
+                            <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">{filteredFlights.length} Flights Found</span>
+                        </div>
+
                     </div>
                 )}
 
-                <div className="space-y-6">
+                <motion.div
+                    variants={container}
+                    initial="hidden"
+                    animate="show"
+                    className="space-y-4 md:space-y-6"
+                >
                     {filteredFlights.map((flight) => (
-                        <div key={flight.id} className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 hover:shadow-2xl hover:border-[#079d9a]/20 transition-all duration-300">
-                            {/* Airline Name Header */}
-                            <div className="flex items-center gap-2 mb-6 ml-1">
-                                <Plane className="w-4 h-4 text-[#079d9a]" />
-                                <span className="text-sm font-black text-slate-900 uppercase tracking-tighter">{flight.airline}</span>
-                            </div>
+                        <motion.div
+                            variants={itemAnim}
+                            key={flight.id}
+                            className="bg-white rounded-[2rem] p-6 md:p-8 shadow-sm border border-slate-100 hover:shadow-xl hover:border-[#079d9a]/20 transition-all duration-500 group relative overflow-hidden"
+                        >
+                            <div className="flex flex-col lg:flex-row lg:items-center gap-6 md:gap-10">
+                                {/* Airline Branding */}
+                                <div className="flex-shrink-0 flex items-center gap-4 border-b lg:border-b-0 lg:border-r border-slate-50 pb-4 md:pb-6 lg:pb-0 lg:pr-10">
+                                    <div className="w-16 h-16 md:w-28 md:h-28 rounded-xl md:rounded-2xl bg-white shadow-inner flex items-center justify-center border border-slate-100 p-2 group-hover:scale-105 transition-transform duration-500">
+                                        <Image
+                                            src={flight.logo || "/Jetset_logo.png"}
+                                            alt={flight.airline}
+                                            width={150}
+                                            height={150}
+                                            className="object-contain"
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="text-base md:text-lg font-black text-slate-900 tracking-tight">{flight.airline}</p>
+                                        <p className="text-[9px] md:text-[10px] font-bold text-[#079d9a] uppercase tracking-widest">{flight.aircraft}</p>
+                                    </div>
+                                </div>
 
-                            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-
-                                {/* Times & Cities */}
-                                <div className="flex-1 flex items-center justify-between w-full">
-                                    <div className="flex items-center gap-4">
-                                        <div className="h-14 w-14 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
-                                            <div className="text-[#079d9a] font-bold text-xs">{flight.fromCode}</div>
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-slate-900 text-lg">{flight.departureTime}</p>
-                                            <p className="text-xs font-semibold text-slate-400 uppercase">
-                                                {AIRPORTS.find(a => a.id === flight.fromCode)?.city || flight.fromCode}
-                                            </p>
+                                {/* Main Flight Logic */}
+                                <div className="flex-grow flex flex-col sm:flex-row items-center justify-between gap-6 md:gap-16">
+                                    <div className="flex flex-col items-center sm:items-start text-center sm:text-left min-w-[80px]">
+                                        <p className="text-2xl md:text-3xl font-black text-slate-900">{flight.departureTime}</p>
+                                        <div className="flex flex-col leading-tight">
+                                            <span className="text-sm font-black text-slate-400 uppercase tracking-tighter">{flight.fromCode}</span>
+                                            <span className="text-[9px] md:text-[10px] font-bold text-slate-400 truncate max-w-[80px] md:max-w-[100px]">{AIRPORTS.find(a => a.id === flight.fromCode)?.city}</span>
                                         </div>
                                     </div>
 
-                                    {/* Flight Line */}
-                                    <div className="flex flex-col items-center flex-1 px-8 text-center">
-                                        <span className="text-xs font-bold text-slate-400 mb-1">{flight.duration}</span>
-                                        <div className="w-full flex items-center">
-                                            <div className="h-[2px] w-full bg-slate-200 rounded-full relative">
-                                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2">
-                                                    <Clock className="w-4 h-4 text-slate-300" />
-                                                </div>
+                                    {/* Advanced Timeline */}
+                                    <div className="flex-grow flex flex-col items-center max-w-[300px] w-full relative py-2">
+                                        <span className="text-[9px] md:text-[10px] font-bold text-slate-400 mb-2 md:mb-3 bg-slate-50 px-2 md:px-3 py-1 rounded-full">{flight.duration}</span>
+                                        <div className="w-full relative h-[2px] md:h-[3px] bg-slate-100 rounded-full">
+                                            <div className="absolute top-1/2 left-0 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-slate-200 border-2 border-white -translate-y-1/2" />
+                                            <div className="absolute top-1/2 right-0 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-slate-200 border-2 border-white -translate-y-1/2" />
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: "100%" }}
+                                                transition={{ duration: 1.5, delay: 0.5 }}
+                                                className="absolute top-0 left-0 h-full bg-gradient-to-r from-slate-100 via-[#079d9a]/40 to-slate-100 rounded-full"
+                                            />
+                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-1 rounded-full border border-slate-50 shadow-sm">
+                                                <Plane className="w-3 h-3 md:w-4 md:h-4 text-[#079d9a] transform rotate-90" />
                                             </div>
                                         </div>
-                                        <span className="text-[10px] font-bold text-[#079d9a] mt-2 uppercase tracking-widest">{flight.stops}</span>
+                                        <span className="text-[8px] md:text-[9px] font-bold text-emerald-500 mt-2 md:mt-3 uppercase tracking-[0.2em]">{flight.stops}</span>
                                     </div>
 
-                                    <div className="text-right flex items-center gap-4">
-                                        <div>
-                                            <p className="font-bold text-slate-900 text-lg">{flight.arrivalTime}</p>
-                                            <p className="text-xs font-semibold text-slate-400 uppercase">
-                                                {AIRPORTS.find(a => a.id === flight.toCode)?.city || flight.toCode}
-                                            </p>
-                                        </div>
-                                        <div className="h-14 w-14 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
-                                            <div className="text-[#079d9a] font-bold text-xs">{flight.toCode}</div>
+                                    <div className="flex flex-col items-center sm:items-end text-center sm:text-right min-w-[80px]">
+                                        <p className="text-2xl md:text-3xl font-black text-slate-900">{flight.arrivalTime}</p>
+                                        <div className="flex flex-col leading-tight">
+                                            <span className="text-sm font-black text-slate-400 uppercase tracking-tighter">{flight.toCode}</span>
+                                            <span className="text-[9px] md:text-[10px] font-bold text-slate-400 truncate max-w-[80px] md:max-w-[100px]">{AIRPORTS.find(a => a.id === flight.toCode)?.city}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Divider */}
-                                <div className="hidden md:block w-px h-16 bg-slate-100"></div>
-
-                                {/* Price & Action */}
-                                <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto gap-4">
-                                    <div>
-                                        <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest text-left md:text-right mb-1">From</p>
-                                        <p className="text-2xl font-black text-[#079d9a]">{flight.price}</p>
+                                {/* Action & Price Section */}
+                                <div className="flex-shrink-0 lg:border-l lg:border-slate-50 pt-4 md:pt-6 lg:pt-0 lg:pl-10 flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4 md:gap-6 min-w-full sm:min-w-[180px]">
+                                    <div className="text-left lg:text-right">
+                                        <p className="text-[8px] md:text-[10px] uppercase font-bold text-slate-300 tracking-[0.2em] mb-0.5 md:mb-1">Total Fare</p>
+                                        <p className="text-2xl md:text-4xl font-black text-[#079d9a]">{flight.price}</p>
                                     </div>
                                     <a
-                                        href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Flight Inquiry*\n*From:* ${flight.fromCode}\n*To:* ${flight.toCode}\n*Airline:* ${flight.airline}\n*Time:* ${flight.departureTime}`)}`}
+                                        href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Booking Flight Ticket*\n*Airline:* ${flight.airline}\n*Route:* ${flight.fromCode} to ${flight.toCode}\n*Time:* ${flight.departureTime}\n*Fare:* ${flight.price}`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        className="flex-grow sm:flex-grow-0"
                                     >
-                                        <button className="bg-[#079d9a] text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#068a87] transition-colors flex items-center gap-2">
-                                            Book Now <ArrowRight className="w-4 h-4" />
+                                        <button className="w-full bg-[#079d9a] hover:bg-emerald-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-xl shadow-[#079d9a]/20 hover:shadow-emerald-500/20 transition-all duration-300 flex items-center justify-center gap-2">
+                                            <MessageCircle className="w-4 h-4 fill-white/20" /> Book on WhatsApp
                                         </button>
                                     </a>
                                 </div>
                             </div>
 
-                            {/* Tags */}
-                            <div className="mt-6 pt-4 border-t border-slate-50 flex gap-3 text-xs font-semibold text-slate-500">
-                                <span className="bg-[#079d9a]/5 text-[#079d9a] px-3 py-1 rounded-md">{flight.airline}</span>
-                                <span className="bg-slate-50 px-3 py-1 rounded-md">{seatClass}</span>
-                                <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-md">Baggage included</span>
+                            {/* Extra Perks */}
+                            <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-slate-50 flex flex-wrap gap-2 md:gap-4 text-[8px] md:text-[10px] font-bold text-slate-400">
+                                <div className="flex items-center gap-1.5 bg-slate-50 px-2 md:px-3 py-1 md:py-1.5 rounded-lg border border-slate-100">
+                                    <Briefcase className="w-3 h-3 text-[#079d9a]" /> 25KG BAGGAGE
+                                </div>
+                                <div className="flex items-center gap-1.5 bg-slate-50 px-2 md:px-3 py-1 md:py-1.5 rounded-lg border border-slate-100">
+                                    <Coffee className="w-3 h-3 text-[#079d9a]" /> SNACK
+                                </div>
+                                <div className="flex items-center gap-1.5 bg-slate-50 px-2 md:px-3 py-1 md:py-1.5 rounded-lg border border-slate-100">
+                                    <ShieldCheck className="w-3 h-3 text-[#079d9a]" /> REFUNDABLE
+                                </div>
+                                <div className="hidden sm:flex items-center gap-1.5 ml-auto text-emerald-500">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 anim-pulse" /> INSTANT CONFIRMATION
+                                </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
 
                     {/* Empty State */}
                     {filteredFlights.length === 0 && (
-                        <div className="text-center py-20 bg-white rounded-[2rem] border border-slate-100">
-                            <Plane className="w-16 h-16 text-slate-200 mx-auto mb-4" />
-                            <h3 className="text-xl font-bold text-slate-800 mb-2">No Flights Found</h3>
-                            <p className="text-slate-500">Try adjusting your travel dates or destinations.</p>
-                        </div>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-center py-24 bg-white rounded-[3rem] border-2 border-dashed border-slate-100"
+                        >
+                            <div className="w-24 h-24 bg-[#079d9a]/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <Plane className="w-10 h-10 text-[#079d9a] transform -rotate-45" />
+                            </div>
+                            <h3 className="text-2xl font-black text-slate-800 mb-2 tracking-tight">Sky is clear!</h3>
+                            <p className="text-slate-500 max-w-xs mx-auto text-sm font-medium">We couldn't find any flights for this specific route. Try changing your departure or destination.</p>
+                            <button
+                                onClick={() => window.location.href = "/"}
+                                className="mt-8 bg-slate-900 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#079d9a] transition-colors"
+                            >
+                                Back to Search
+                            </button>
+                        </motion.div>
                     )}
-                </div>
+                </motion.div>
             </div>
         </main>
     );

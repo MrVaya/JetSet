@@ -66,3 +66,8 @@
   --color-border: var(--border);
   --color-ring: var(--ring);
 }
+
+.hero-sharp {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}

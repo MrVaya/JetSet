@@ -73,16 +73,16 @@ export default function AboutPage() {
                     >
                         <div className="absolute top-0 right-0 w-4/5 h-4/5 rounded-[3.5rem] overflow-hidden shadow-2xl z-10">
                             <Image
-                                src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80"
-                                alt="Luxury Jet"
+                                src="/chitwan.jpg"
+                                alt="Chitwan "
                                 fill
                                 className="object-cover"
                             />
                         </div>
                         <div className="absolute bottom-0 left-0 w-3/5 h-3/5 rounded-[3rem] overflow-hidden border-[12px] border-white shadow-2xl z-20">
                             <Image
-                                src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80"
-                                alt="Premium SUV"
+                                src="/hiace.jpg"
+                                alt="Premium  Hiace"
                                 fill
                                 className="object-cover"
                             />
@@ -158,8 +158,8 @@ export default function AboutPage() {
                                 </Button>
                             </Link>
                             <Link href="/services">
-                                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-10 h-16 rounded-2xl font-bold uppercase tracking-widest text-xs w-full md:w-auto">
-                                    View Destinatons
+                                <Button variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white/10 px-10 h-16 rounded-2xl font-bold uppercase tracking-widest text-xs w-full md:w-auto">
+                                    View Destinations
                                 </Button>
                             </Link>
                         </div>

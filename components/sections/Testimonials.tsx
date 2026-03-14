@@ -14,7 +14,7 @@ const TESTIMONIALS = [
     },
     {
         id: 1,
-        name: "Sumik Malla",
+        name: "Anny Stack",
         text: '"Excellence in every mile" The attention to detail in their flight packages is unmatched. I felt like a VIP from takeoff to landing.',
         img: "https://i.pravatar.cc/150?u=john",
     },
@@ -26,7 +26,7 @@ const TESTIMONIALS = [
     },
     {
         id: 3,
-        name: "Sandeep Gurung",
+        name: "Charlotte Flare",
         text: 'The  transportation was the highlight. The SUV was brand new and the driver was extremely professional.',
         img: "https://i.pravatar.cc/150?u=michael",
     },
@@ -132,18 +132,20 @@ export default function Testimonials() {
                 </div>
 
                 {/* Floating Side Controls */}
-                <div className="absolute w-full flex justify-between px-4 md:px-12 pointer-events-none">
+                <div className="absolute inset-y-0 left-0 right-0 flex justify-between items-center px-4 md:px-12 pointer-events-none z-30">
                     <button
                         onClick={prev}
-                        className="pointer-events-auto p-4 text-white/40 hover:text-white transition-all transform hover:scale-110"
+                        className="pointer-events-auto p-2 md:p-4 text-white/30 hover:text-white transition-all transform hover:scale-110 active:scale-95 bg-black/20 md:bg-transparent rounded-full backdrop-blur-sm md:backdrop-blur-none"
+                        aria-label="Previous Testimonial"
                     >
-                        <ChevronLeft className="w-12 h-12 md:w-20 md:h-20 stroke-[1px]" />
+                        <ChevronLeft className="w-8 h-8 md:w-16 md:h-16 stroke-[1.5px]" />
                     </button>
                     <button
                         onClick={next}
-                        className="pointer-events-auto p-4 text-[#ff7c1c] hover:text-[#ff9d54] transition-all transform hover:scale-110"
+                        className="pointer-events-auto p-2 md:p-4 text-[#ff7c1c] hover:text-[#ff9d54] transition-all transform hover:scale-110 active:scale-95 bg-black/20 md:bg-transparent rounded-full backdrop-blur-sm md:backdrop-blur-none"
+                        aria-label="Next Testimonial"
                     >
-                        <ChevronRight className="w-12 h-12 md:w-20 md:h-20 stroke-[1px]" />
+                        <ChevronRight className="w-8 h-8 md:w-16 md:h-16 stroke-[1.5px]" />
                     </button>
                 </div>
 

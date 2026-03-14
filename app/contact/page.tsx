@@ -19,20 +19,20 @@ const CONTACT_INFO = [
     {
         icon: Phone,
         label: "Call Us",
-        value: "+977 9846983690",
-        description: "Mon-Fri from 9am to 6pm.",
+        value: "+977 98417437060",
+        description: "Sun-Fri from 9am to 6pm.",
     },
     {
         icon: Mail,
         label: "Email Us",
-        value: "support@jetset.com",
+        value: "jetsetholidaytravel@gmail.com",
         description: "Our team usually responds within 24h.",
     },
     {
         icon: MapPin,
         label: "Visit Us",
         value: "Kathmandu, Nepal",
-        description: "Main Square, Tourism District.",
+        description: "Latipur",
     },
 ];
 
@@ -69,7 +69,7 @@ export default function ContactPage() {
     };
 
     return (
-        <main className="min-h-screen bg-[#FDFDFD] pt-32 pb-20 px-6">
+        <main className="min-w-0 min-h-screen bg-[#FDFDFD] pt-32 pb-20 px-6">
             <div className="max-w-7xl mx-auto">
 
                 {/* HEADER SECTION */}
@@ -114,27 +114,16 @@ export default function ContactPage() {
                                     <div className="h-14 w-14 rounded-2xl bg-[#079d9a]/10 flex items-center justify-center shrink-0 group-hover:bg-[#079d9a] transition-colors duration-500">
                                         <item.icon className="h-6 w-6 text-[#079d9a] group-hover:text-white transition-colors duration-500" />
                                     </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-1">{item.label}</h4>
-                                        <p className="text-xl font-bold text-slate-900 mb-1">{item.value}</p>
+                                    <div className="min-w-0">
+                                        <h4 className="text-[10px] md:text-sm font-bold uppercase tracking-widest text-slate-400 mb-1">{item.label}</h4>
+                                        <p className="text-lg md:text-xl font-bold text-slate-900 mb-1 break-all">{item.value}</p>
                                         <p className="text-sm text-slate-400 font-medium">{item.description}</p>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* SOCIALS CARD */}
-                        <div className="p-8 bg-slate-900 rounded-[2.5rem] text-white flex flex-col md:flex-row justify-between items-center gap-6">
-                            <div className="flex items-center gap-3">
-                                <Clock className="text-[#079d9a] w-5 h-5" />
-                                <span className="text-sm font-bold uppercase tracking-tight">Available 24/7 on Socials</span>
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#079d9a] cursor-pointer transition-all"><Facebook className="w-4 h-4" /></div>
-                                <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#079d9a] cursor-pointer transition-all"><Instagram className="w-4 h-4" /></div>
-                                <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#079d9a] cursor-pointer transition-all"><Twitter className="w-4 h-4" /></div>
-                            </div>
-                        </div>
+
                     </motion.div>
 
                     {/* RIGHT COLUMN: PREMIUM CONTACT FORM */}
@@ -160,7 +149,7 @@ export default function ContactPage() {
                                         className="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm font-medium focus:ring-2 ring-[#079d9a]/20 outline-none transition-all"
                                     />
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-1">
                                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
                                     <input
                                         value={formData.email}

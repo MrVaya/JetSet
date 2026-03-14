@@ -122,6 +122,8 @@ export const FLIGHTS = [
     {
         id: 101,
         airline: "Buddha Air",
+        logo: "/buddha-air.jpg",
+        aircraft: "ATR 72-500",
         fromCode: "KTM",
         toCode: "PKR",
         departureTime: "08:00 AM",
@@ -133,6 +135,8 @@ export const FLIGHTS = [
     {
         id: 102,
         airline: "Yeti Airlines",
+        logo: "/yeti-airlines.png",
+        aircraft: "ATR 72-500",
         fromCode: "KTM",
         toCode: "PKR",
         departureTime: "06:15 PM",
@@ -144,6 +148,8 @@ export const FLIGHTS = [
     {
         id: 103,
         airline: "Buddha Air",
+        logo: "/buddha-air.jpg",
+        aircraft: "ATR 72-500",
         fromCode: "KTM",
         toCode: "BWA",
         departureTime: "09:30 AM",
@@ -155,6 +161,8 @@ export const FLIGHTS = [
     {
         id: 104,
         airline: "Shree Airlines",
+        logo: "/shree-airline.png",
+        aircraft: "Bombardier Dash 8",
         fromCode: "KTM",
         toCode: "BIR",
         departureTime: "11:00 AM",
@@ -166,6 +174,8 @@ export const FLIGHTS = [
     {
         id: 105,
         airline: "Buddha Air",
+        logo: "/buddha-air.jpg",
+        aircraft: "ATR 72-500",
         fromCode: "KTM",
         toCode: "BDP",
         departureTime: "01:15 PM",
@@ -177,6 +187,8 @@ export const FLIGHTS = [
     {
         id: 106,
         airline: "Yeti Airlines",
+        logo: "/yeti-airlines.png",
+        aircraft: "ATR 72-500",
         fromCode: "KTM",
         toCode: "KEP",
         departureTime: "02:30 PM",
@@ -188,6 +200,8 @@ export const FLIGHTS = [
     {
         id: 107,
         airline: "Buddha Air",
+        logo: "/buddha-air.jpg",
+        aircraft: "ATR 72-500",
         fromCode: "KTM",
         toCode: "DHI",
         departureTime: "04:15 PM",
@@ -199,6 +213,8 @@ export const FLIGHTS = [
     {
         id: 108,
         airline: "Shree Airlines",
+        logo: "/shree-airline.png",
+        aircraft: "Bombardier Dash 8",
         fromCode: "KTM",
         toCode: "JKR",
         departureTime: "10:45 AM",
@@ -210,6 +226,8 @@ export const FLIGHTS = [
     {
         id: 109,
         airline: "Buddha Air",
+        logo: "/buddha-air.jpg",
+        aircraft: "Beechcraft 1900D",
         fromCode: "KTM",
         toCode: "SYW",
         departureTime: "03:00 PM",
@@ -221,6 +239,8 @@ export const FLIGHTS = [
     {
         id: 110,
         airline: "Tara Air",
+        logo: "/tara-air.png",
+        aircraft: "DHC-6 Twin Otter",
         fromCode: "KTM",
         toCode: "JOM",
         departureTime: "07:00 AM",
@@ -231,7 +251,10 @@ export const FLIGHTS = [
     },
     {
         id: 111,
-        airline: "Sita Air",
+        airline: "Yeti Air",
+
+        logo: "/yeti-airlines.png",
+        aircraft: "Beechcraft 1900D",
         fromCode: "KTM",
         toCode: "TAL",
         departureTime: "06:30 AM",
@@ -243,6 +266,8 @@ export const FLIGHTS = [
     {
         id: 112,
         airline: "Buddha Air",
+        logo: "/buddha-air.jpg",
+        aircraft: "Beechcraft 1900D",
         fromCode: "PKR",
         toCode: "BWA",
         departureTime: "08:45 AM",
@@ -254,6 +279,8 @@ export const FLIGHTS = [
     {
         id: 113,
         airline: "Yeti Airlines",
+        logo: "/yeti-airlines.png",
+        aircraft: "Jetstream 41",
         fromCode: "PKR",
         toCode: "BHR",
         departureTime: "12:00 PM",
@@ -265,6 +292,8 @@ export const FLIGHTS = [
     {
         id: 114,
         airline: "Buddha Air",
+        logo: "/buddha-air.jpg",
+        aircraft: "ATR 72-500",
         fromCode: "KEP",
         toCode: "KTM",
         departureTime: "08:15 AM",
@@ -278,6 +307,8 @@ export const FLIGHTS = [
     {
         id: 201,
         airline: "Nepal Airlines",
+        logo: "/nepal-airlines.png",
+        aircraft: "Airbus A330-200",
         fromCode: "KTM",
         toCode: "DXB",
         departureTime: "11:30 PM",
@@ -289,6 +320,8 @@ export const FLIGHTS = [
     {
         id: 202,
         airline: "Air India",
+        logo: "/air-india.jpg",
+        aircraft: "Airbus A320neo",
         fromCode: "KTM",
         toCode: "DEL",
         departureTime: "01:20 PM",
@@ -300,6 +333,8 @@ export const FLIGHTS = [
     {
         id: 203,
         airline: "Qatar Airways",
+        logo: "/qatar-airways.png",
+        aircraft: "Boeing 777-300ER",
         fromCode: "KTM",
         toCode: "DOH",
         departureTime: "09:00 AM",
@@ -311,6 +346,8 @@ export const FLIGHTS = [
     {
         id: 204,
         airline: "Singapore Airlines",
+        logo: "/singapore-airlines.png",
+        aircraft: "Boeing 737 MAX 8",
         fromCode: "SIN",
         toCode: "KTM",
         departureTime: "07:10 PM",
@@ -340,4 +377,38 @@ export const AIRPORTS = [
     { id: "DOH", city: "Doha", name: "Hamad Intl", country: "Qatar" },
     { id: "SIN", city: "Singapore", name: "Changi Airport", country: "Singapore" },
     { id: "LHR", city: "London", name: "Heathrow Airport", country: "UK" },
+];
+
+export const VEHICLES = [
+    {
+        id: 301,
+        name: "Toyota Hiace (Premium)",
+        type: "Bus",
+        capacity: "12-14 Seats",
+        price: "$120/day",
+        image: "/hiace.jpg",
+        location: "KTM",
+        features: ["Air Conditioning", "WiFi", "Professional Driver", "Luggage Space"]
+    },
+    {
+        id: 302,
+        name: "Scorpio 4WD (Classic)",
+        type: "Scorpio",
+        capacity: "7 Seats",
+        price: "$85/day",
+        image: "/scorpio.jpg",
+        location: "PKR",
+        features: ["Off-road capable", "Air Conditioning", "Local Driver", "Mountain Ready"]
+    },
+    {
+        id: 303,
+        name: "Suv",
+        type: "Luxury SUV",
+        capacity: "5 Seats",
+        price: "$250/day",
+        image: "/suv.avif",
+        location: "KTM",
+        features: ["Ultimate Luxury", "High Clearance", "English Speaking Driver", "Safety Kit"]
+    },
+
 ];
