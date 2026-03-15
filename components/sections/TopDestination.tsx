@@ -8,13 +8,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const destinations = [
-    { id: 1, name: "Lumbini", country: "Nepal", img: "/lumbini.jpg", visitors: 10 },
+    { id: 1, name: "Thailand", country: "Thailand", img: "/thailand.jpg", visitors: 10 },
     { id: 2, name: "Chitwan National Park", country: "Nepal", img: "/chitwan.jpg", visitors: 18 },
     { id: 3, name: "Paris", country: "France", img: "/paris.jpg", visitors: 25 },
     { id: 4, name: "Dubai", country: "UAE", img: "/dubai.jpg", visitors: 30 },
     { id: 5, name: "Bali", country: "Indonesia", img: "/bali.jpg", visitors: 15 },
     { id: 6, name: "Pokhara", country: "Nepal", img: "/pokhara.jpg", visitors: 10 },
-    { id: 7, name: "Ghandruk", country: "Nepal", img: "/ghandruk.jpg", visitors: 10 },
+    { id: 7, name: "Kenya Safari ", country: "Kenya", img: "/kenya.webp", visitors: 10 },
+    { id: 8, name: "Ghandruk", country: "Nepal", img: "/ghandruk.jpg", visitors: 10 },
 ];
 
 export default function TopDestinations() {
@@ -86,10 +87,10 @@ export default function TopDestinations() {
                                 className="w-[85vw] md:w-[400px] bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 p-3 md:p-4 pb-6 md:pb-8 flex-shrink-0"
                             >
                                 <div className="relative h-64 md:h-72 w-full rounded-[2rem] overflow-hidden mb-4 md:mb-6">
-                                    <Image 
-                                        src={item.img} 
-                                        alt={item.name} 
-                                        fill 
+                                    <Image
+                                        src={item.img}
+                                        alt={item.name}
+                                        fill
                                         className="object-cover"
                                         sizes="(max-width: 768px) 85vw, 400px"
                                         priority={item.id === 1}

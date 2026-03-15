@@ -3,7 +3,7 @@ export interface Package {
     title: string;
     from: string;
     to: string;
-    price: string;
+
     image: string;
     rating: number;
     duration: string;
@@ -19,7 +19,7 @@ export interface Flight {
     departureTime: string;
     arrivalTime: string;
     duration: string;
-    price: string;
+
     stops: string;
 }
 
@@ -35,7 +35,7 @@ export interface Vehicle {
     name: string;
     type: string;
     capacity: string;
-    price: string;
+
     image: string;
     location: string;
     features: string[];
@@ -53,7 +53,7 @@ export const SITE_CONFIG = {
     }
 };
 
-export const LOCATIONS = ["Kathmandu", "Pokhara", "Lumbini", "Chitwan", "Lukla", "Rara Lake", "Biratnagar", "Bhairahawa", "Nepalgunj", "Dhangadhi", "Janakpur", "Bhadrapur", "Dubai", "New Delhi", "Doha", "Singapore", "London"];
+export const LOCATIONS = ["Kathmandu", "Pokhara", "Lumbini", "Chitwan", "Lukla", "Rara Lake", "Biratnagar", "Bhairahawa", "Nepalgunj", "Dhangadhi", "Janakpur", "Bhadrapur", "Dubai", "New Delhi", "Doha", "Singapore", "London", "Thailand", "Turkey", "Vietnam", "Kerala", "Egypt", "Kenya", "Maldives", "Malaysia"];
 
 export const PACKAGES = [
     {
@@ -61,7 +61,7 @@ export const PACKAGES = [
         title: "Luxury Palm Stay (Dubai)",
         from: "LHR",
         to: "DXB",
-        price: "$1,200",
+
         image: "/dubai.jpg",
         rating: 4.9,
         duration: "5 Days"
@@ -71,7 +71,7 @@ export const PACKAGES = [
         title: "Eiffel Romance Package",
         from: "DXB",
         to: "CDG",
-        price: "$850",
+
         image: "/paris.jpg",
         rating: 4.8,
         duration: "3 Days"
@@ -81,7 +81,7 @@ export const PACKAGES = [
         title: "Bali Tropical Escape",
         from: "SIN",
         to: "DPS",
-        price: "$950",
+
         image: "/bali.jpg",
         rating: 4.7,
         duration: "7 Days"
@@ -92,7 +92,7 @@ export const PACKAGES = [
         title: "Kathmandu Valley Tour",
         from: "KTM",
         to: "KTM",
-        price: "$350",
+
         image: "/kathmandu.webp",
         rating: 4.8,
         duration: "6 Days"
@@ -105,7 +105,7 @@ export const PACKAGES = [
         title: "Chitwan Wildlife Luxury",
         from: "KTM",
         to: "BHR",
-        price: "$550",
+
         image: "/chitwan.jpg",
         rating: 4.7,
         duration: "3 Days"
@@ -115,7 +115,7 @@ export const PACKAGES = [
         title: "Pokhara Lakeside Serenity",
         from: "KTM",
         to: "PKR",
-        price: "$290",
+
         image: "/pokhara.jpg",
         rating: 4.8,
         duration: "2 Days"
@@ -125,7 +125,7 @@ export const PACKAGES = [
         title: "Muktinath Pilgrimage Tour",
         from: "KTM",
         to: "PKR",
-        price: "$450",
+
         image: "/muktinath.png",
         rating: 4.9,
         duration: "5 Days"
@@ -135,7 +135,7 @@ export const PACKAGES = [
         title: "Rara Lake Discovery",
         from: "KTM",
         to: "TAL",
-        price: "$650",
+
         image: "/Rara-Lake.jpg",
         rating: 4.8,
         duration: "7 Days"
@@ -145,7 +145,7 @@ export const PACKAGES = [
         title: "Lumbini Peace Journey",
         from: "KTM",
         to: "BWA",
-        price: "$420",
+
         image: "/lumbini.jpg",
         rating: 4.7,
         duration: "3 Days"
@@ -155,7 +155,7 @@ export const PACKAGES = [
         title: "Upper Mustang Jeep Tour",
         from: "KTM",
         to: "JOM",
-        price: "$1,350",
+
         image: "/upper mustang.jpg",
         rating: 4.9,
         duration: "12 Days"
@@ -165,10 +165,90 @@ export const PACKAGES = [
         title: "Ghandruk Cultural Village",
         from: "KTM",
         to: "PKR",
-        price: "$280",
         image: "/ghandruk.jpg",
         rating: 4.8,
         duration: "3 Days"
+    },
+    {
+        id: 16,
+        title: "Thailand Paradise Retreat",
+        from: "KTM",
+        to: "BKK",
+        image: "/Thailand.jpg",
+        rating: 4.9,
+        duration: "6 Days"
+    },
+    {
+        id: 17,
+        title: "Grand Turkey Explorer",
+        from: "KTM",
+        to: "IST",
+        image: "/turkey.avif",
+        rating: 4.8,
+        duration: "8 Days"
+    },
+    {
+        id: 18,
+        title: "Phu Quoc Island Escape",
+        from: "KTM",
+        to: "PQC",
+        image: "/phu-quco-vietnam.jpg",
+        rating: 4.7,
+        duration: "5 Days"
+    },
+    {
+        id: 19,
+        title: "Kerala Backwater Luxury",
+        from: "KTM",
+        to: "COK",
+        image: "/kerala.jpg",
+        rating: 4.8,
+        duration: "7 Days"
+    },
+    {
+        id: 20,
+        title: "Majestic Egypt Wonders",
+        from: "KTM",
+        to: "CAI",
+        image: "/Egypt.avif",
+        rating: 4.9,
+        duration: "10 Days"
+    },
+    {
+        id: 21,
+        title: "Singapore Modern Marvels",
+        from: "KTM",
+        to: "SIN",
+        image: "/singapore.webp",
+        rating: 4.8,
+        duration: "4 Days"
+    },
+    {
+        id: 22,
+        title: "Kenya Safari Adventure",
+        from: "KTM",
+        to: "NBO",
+        image: "/kenya.webp",
+        rating: 4.9,
+        duration: "9 Days"
+    },
+    {
+        id: 23,
+        title: "Maldives Azure Overwater",
+        from: "KTM",
+        to: "MLE",
+        image: "/Maldives.avif",
+        rating: 5.0,
+        duration: "5 Days"
+    },
+    {
+        id: 24,
+        title: "Malaysia Cultural Fusion",
+        from: "KTM",
+        to: "KUL",
+        image: "/malaysia.avif",
+        rating: 4.7,
+        duration: "6 Days"
     }
 ];
 
@@ -184,7 +264,7 @@ export const FLIGHTS = [
         departureTime: "08:00 AM",
         arrivalTime: "08:30 AM",
         duration: "30m",
-        price: "$110",
+
         stops: "Non-stop"
     },
     {
@@ -197,7 +277,7 @@ export const FLIGHTS = [
         departureTime: "06:15 PM",
         arrivalTime: "06:45 PM",
         duration: "30m",
-        price: "$110",
+
         stops: "Non-stop"
     },
     {
@@ -210,7 +290,7 @@ export const FLIGHTS = [
         departureTime: "09:30 AM",
         arrivalTime: "10:15 AM",
         duration: "45m",
-        price: "$95",
+
         stops: "Non-stop"
     },
     {
@@ -223,7 +303,7 @@ export const FLIGHTS = [
         departureTime: "11:00 AM",
         arrivalTime: "11:40 AM",
         duration: "40m",
-        price: "$85",
+
         stops: "Non-stop"
     },
     {
@@ -236,7 +316,7 @@ export const FLIGHTS = [
         departureTime: "01:15 PM",
         arrivalTime: "02:00 PM",
         duration: "45m",
-        price: "$105",
+
         stops: "Non-stop"
     },
     {
@@ -249,7 +329,7 @@ export const FLIGHTS = [
         departureTime: "02:30 PM",
         arrivalTime: "03:25 PM",
         duration: "55m",
-        price: "$125",
+
         stops: "Non-stop"
     },
     {
@@ -262,7 +342,7 @@ export const FLIGHTS = [
         departureTime: "04:15 PM",
         arrivalTime: "05:30 PM",
         duration: "1h 15m",
-        price: "$140",
+
         stops: "Non-stop"
     },
     {
@@ -275,7 +355,7 @@ export const FLIGHTS = [
         departureTime: "10:45 AM",
         arrivalTime: "11:15 AM",
         duration: "30m",
-        price: "$75",
+
         stops: "Non-stop"
     },
     {
@@ -288,7 +368,7 @@ export const FLIGHTS = [
         departureTime: "03:00 PM",
         arrivalTime: "03:20 PM",
         duration: "20m",
-        price: "$60",
+
         stops: "Non-stop"
     },
     {
@@ -301,7 +381,7 @@ export const FLIGHTS = [
         departureTime: "07:00 AM",
         arrivalTime: "07:45 AM",
         duration: "45m",
-        price: "$150",
+
         stops: "Non-stop"
     },
     {
@@ -315,7 +395,7 @@ export const FLIGHTS = [
         departureTime: "06:30 AM",
         arrivalTime: "07:20 AM",
         duration: "50m",
-        price: "$190",
+
         stops: "Non-stop"
     },
     {
@@ -328,7 +408,7 @@ export const FLIGHTS = [
         departureTime: "08:45 AM",
         arrivalTime: "09:10 AM",
         duration: "25m",
-        price: "$80",
+
         stops: "Non-stop"
     },
     {
@@ -341,7 +421,7 @@ export const FLIGHTS = [
         departureTime: "12:00 PM",
         arrivalTime: "12:20 PM",
         duration: "20m",
-        price: "$70",
+
         stops: "Non-stop"
     },
     {
@@ -354,7 +434,7 @@ export const FLIGHTS = [
         departureTime: "08:15 AM",
         arrivalTime: "09:10 AM",
         duration: "55m",
-        price: "$120",
+
         stops: "Non-stop"
     },
 
@@ -369,7 +449,7 @@ export const FLIGHTS = [
         departureTime: "11:30 PM",
         arrivalTime: "02:45 AM",
         duration: "4h 15m",
-        price: "$320",
+
         stops: "Non-stop"
     },
     {
@@ -382,7 +462,7 @@ export const FLIGHTS = [
         departureTime: "01:20 PM",
         arrivalTime: "02:45 PM",
         duration: "1h 40m",
-        price: "$145",
+
         stops: "Non-stop"
     },
     {
@@ -395,7 +475,7 @@ export const FLIGHTS = [
         departureTime: "09:00 AM",
         arrivalTime: "12:15 PM",
         duration: "4h 45m",
-        price: "$650",
+
         stops: "Non-stop"
     },
     {
@@ -408,7 +488,59 @@ export const FLIGHTS = [
         departureTime: "07:10 PM",
         arrivalTime: "10:15 PM",
         duration: "4h 50m",
-        price: "$580",
+
+        stops: "Non-stop"
+    },
+    {
+        id: 205,
+        airline: "Thai Airways",
+        logo: "https://images.kiwi.com/airlines/64/TG.png",
+        aircraft: "Airbus A350-900",
+        fromCode: "KTM",
+        toCode: "BKK",
+        departureTime: "01:30 PM",
+        arrivalTime: "06:15 PM",
+        duration: "3h 30m",
+
+        stops: "Non-stop"
+    },
+    {
+        id: 206,
+        airline: "Turkish Airlines",
+        logo: "https://images.kiwi.com/airlines/64/TK.png",
+        aircraft: "Airbus A330-300",
+        fromCode: "KTM",
+        toCode: "IST",
+        departureTime: "07:35 AM",
+        arrivalTime: "12:55 PM",
+        duration: "8h 05m",
+
+        stops: "Non-stop"
+    },
+    {
+        id: 207,
+        airline: "Malaysian Airlines",
+        logo: "https://images.kiwi.com/airlines/64/MH.png",
+        aircraft: "Boeing 737-800",
+        fromCode: "KTM",
+        toCode: "KUL",
+        departureTime: "11:20 PM",
+        arrivalTime: "06:10 AM",
+        duration: "4h 50m",
+
+        stops: "Non-stop"
+    },
+    {
+        id: 208,
+        airline: "Maldivian",
+        logo: "https://images.kiwi.com/airlines/64/Q2.png",
+        aircraft: "Airbus A320",
+        fromCode: "KTM",
+        toCode: "MLE",
+        departureTime: "09:45 AM",
+        arrivalTime: "01:20 PM",
+        duration: "4h 50m",
+
         stops: "Non-stop"
     }
 ];
@@ -432,6 +564,14 @@ export const AIRPORTS = [
     { id: "DOH", city: "Doha", name: "Hamad Intl", country: "Qatar" },
     { id: "SIN", city: "Singapore", name: "Changi Airport", country: "Singapore" },
     { id: "LHR", city: "London", name: "Heathrow Airport", country: "UK" },
+    { id: "BKK", city: "Bangkok", name: "Suvarnabhumi Airport", country: "Thailand" },
+    { id: "IST", city: "Istanbul", name: "Istanbul Airport", country: "Turkey" },
+    { id: "PQC", city: "Phu Quoc", name: "Phu Quoc Intl", country: "Vietnam" },
+    { id: "COK", city: "Kochi", name: "Cochin Intl", country: "India" },
+    { id: "CAI", city: "Cairo", name: "Cairo International", country: "Egypt" },
+    { id: "NBO", city: "Nairobi", name: "Jomo Kenyatta Intl", country: "Kenya" },
+    { id: "MLE", city: "Male", name: "Velana International", country: "Maldives" },
+    { id: "KUL", city: "Kuala Lumpur", name: "Kuala Lumpur Intl", country: "Malaysia" },
 ];
 
 export const VEHICLES = [
@@ -440,7 +580,7 @@ export const VEHICLES = [
         name: "Vintage Wedding Car",
         type: "Wedding/Marriage Special",
         capacity: "4 Seats",
-        price: "$150/day",
+
         image: "/wedding-car.png",
         location: "KTM",
         features: ["Flower Decoration included", "Professional Chauffeur", "VIP Treatment", "Premium Sound System"]
@@ -450,7 +590,7 @@ export const VEHICLES = [
         name: "Toyota Hiace VIP (Corporate)",
         type: "Corporate VIP Travel",
         capacity: "12 Seats",
-        price: "$130/day",
+
         image: "/corporate-van.png",
         location: "KTM",
         features: ["Leather Captain Seats", "High-speed WiFi", "Conference Table", "Refreshments provided"]
@@ -460,7 +600,7 @@ export const VEHICLES = [
         name: "Land Cruiser 4x4 (V8)",
         type: "Off-Road Specialist",
         capacity: "7 Seats",
-        price: "$280/day",
+
         image: "/offroad-jeep.png",
         location: "PKR",
         features: ["Extreme Off-Road Ready", "Luxury Interior", "English Speaking Driver", "Satellite Navigation"]
@@ -470,7 +610,7 @@ export const VEHICLES = [
         name: "Toyota Hiace  ",
         type: "Bus/Group Travel",
         capacity: "14 Seats",
-        price: "$120/day",
+
         image: "/hiace.jpg",
         location: "KTM",
         features: ["Air Conditioning", "Ample Luggage Space", "Professional Local Driver", "Safety Belts on all seats"]
@@ -480,7 +620,7 @@ export const VEHICLES = [
         name: "Scorpio 4WD (Standard)",
         type: "Mountain Trekking Jeep",
         capacity: "7 Seats",
-        price: "$85/day",
+
         image: "/scorpio.jpg",
         location: "PKR",
         features: ["Rugged Performance", "Air Conditioning", "Local Expert Driver", "Mountain Proven"]
@@ -490,7 +630,7 @@ export const VEHICLES = [
         name: "All Types of Car  ",
         type: "Executive",
         capacity: "4 Seats",
-        price: "$350/day",
+
         image: "/suv.avif",
         location: "KTM",
         features: ["Ultimate Prestige", "Privacy Glass", "Bilingual Driver", "On-board Bar"]

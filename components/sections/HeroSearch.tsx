@@ -51,7 +51,7 @@ export default function HeroSearch() {
             const params = new URLSearchParams();
             params.set("origin", origin);
             params.set("destination", destination);
-            if (date) params.set("date", date.toISOString());
+            if (date) params.set("date", date.toISOString().split('T')[0]);
             params.set("travelers", travelers.count.toString());
             params.set("class", travelers.class);
 

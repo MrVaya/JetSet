@@ -114,7 +114,7 @@ function ServicesContent({
                     variants={container}
                     initial="hidden"
                     animate="show"
-                    className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-8"
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
                 >
                     {displayItems.map((item: Package | Vehicle) => (
                         <motion.div
@@ -122,7 +122,7 @@ function ServicesContent({
                             key={item.id}
                             className="bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 group flex flex-col"
                         >
-                            <div className="relative h-40 md:h-64 overflow-hidden">
+                            <div className="relative h-40 md:h-52 overflow-hidden">
                                 <Image
                                     src={item.image}
                                     alt={'name' in item ? item.name : item.title}
@@ -142,7 +142,7 @@ function ServicesContent({
                                 )}
                             </div>
 
-                            <div className="p-4 md:p-8 flex flex-col flex-grow">
+                            <div className="p-4 md:p-6 flex flex-col flex-grow">
                                 <div className="mb-2 md:mb-4">
                                     <h3 className="text-[13px] md:text-xl font-black text-slate-900 line-clamp-2 leading-tight mb-1">
                                         {'name' in item ? item.name : item.title}
@@ -197,7 +197,7 @@ function ServicesContent({
                                                     <div className="flex items-center justify-between pt-6 border-t border-slate-100 mt-auto">
                                                         <div className="flex flex-col">
                                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Starting from</span>
-                                                            <span className="text-2xl font-black text-[#079d9a]">{'price' in item ? item.price : "Enquire"}</span>
+                                                            {/* <span className="text-2xl font-black text-[#079d9a]">{'price' in item ? item.price : "Enquire"}</span> */}
                                                         </div>
                                                         <a
                                                             href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Price Inquiry*\n*Item:* ${'name' in item ? item.name : item.title}\n\nPlease provide the current price and availability.`)}`}
