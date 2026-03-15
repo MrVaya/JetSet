@@ -2,6 +2,7 @@ import { MapPin, ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { SITE_CONFIG } from "@/lib/data";
 
 const DESTINATIONS = [
     {
@@ -108,13 +109,13 @@ export default function PopularDestinations() {
                         </div>
 
                         <a
-                            href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Booking Inquiry*\n*Destination:* ${item.title}`)}`}
+                            href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Tour Inquiry*\n*Destination:* ${item.title}\n\nPlease provide more details and current pricing for this package.`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-full"
                         >
                             <Button className="w-full bg-[#079d9a]/10 hover:bg-[#079d9a] text-[#079d9a] hover:text-white transition-all duration-300 rounded-xl md:rounded-2xl py-5 md:py-6 font-bold uppercase text-[10px] md:text-[11px] tracking-widest">
-                                Book Now
+                                Contact Us
                             </Button>
                         </a>
                     </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import Link from "next/link";
+
 const destinations = [
     { id: 1, name: "Lumbini", country: "Nepal", img: "/lumbini.jpg", visitors: 10 },
     { id: 2, name: "Chitwan National Park", country: "Nepal", img: "/chitwan.jpg", visitors: 18 },
@@ -14,14 +14,23 @@ const destinations = [
     { id: 4, name: "Dubai", country: "UAE", img: "/dubai.jpg", visitors: 30 },
     { id: 5, name: "Bali", country: "Indonesia", img: "/bali.jpg", visitors: 15 },
     { id: 6, name: "Pokhara", country: "Nepal", img: "/pokhara.jpg", visitors: 10 },
-    { id: 7, name: "Ghandruk ", country: "Nepal", img: "/Ghandruk.jpg", visitors: 10 },
-
+    { id: 7, name: "Ghandruk", country: "Nepal", img: "/ghandruk.jpg", visitors: 10 },
 ];
 
 export default function TopDestinations() {
     const [index, setIndex] = useState(0);
+    const [cardWidth, setCardWidth] = useState(0);
 
-    // Logic to slide
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth < 768 ? window.innerWidth * 0.85 : 400;
+            setCardWidth(width + (window.innerWidth < 768 ? 24 : 32)); // width + gap
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const nextStep = () => {
         if (index < destinations.length - 1) setIndex(index + 1);
     };
@@ -43,7 +52,6 @@ export default function TopDestinations() {
                         <Link href="/services">
                             <Button variant="outline" className="border-slate-300 rounded-lg px-6 hover:bg-[#079d9a] hover:text-white transition-colors">See all</Button>
                         </Link>
-                        {/* Custom Navigation Arrows */}
                         <div className="hidden md:flex gap-2">
                             <button onClick={prevStep} className="p-2 rounded-full border border-slate-200 hover:bg-slate-50 disabled:opacity-30" disabled={index === 0}>
                                 <ChevronLeft className="h-5 w-5 text-slate-600" />
@@ -58,24 +66,26 @@ export default function TopDestinations() {
                 {/* SLIDER CONTAINER */}
                 <div className="relative">
                     <motion.div
-                        className="flex gap-6 md:gap-8 cursor-grab active:cursor-grabbing"
-                        drag="x"
-                        dragConstraints={{ right: 0, left: -((destinations.length - 1) * 300) }} // Estimated width
-                        animate={{ x: `-${index * (window?.innerWidth < 768 ? 85 : 32)}%` }}
+                        className="flex gap-6 md:gap-8"
+                        animate={{ x: -(index * cardWidth) }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     >
                         {destinations.map((item) => (
-                            <motion.div
+                            <div
                                 key={item.id}
-                                className="min-w-[80%] md:min-w-[35%] lg:min-w-[30%] bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 p-3 md:p-4 pb-6 md:pb-8 flex-shrink-0"
-                                whileTap={{ scale: 0.98 }}
+                                className="w-[85vw] md:w-[400px] bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 p-3 md:p-4 pb-6 md:pb-8 flex-shrink-0"
                             >
-                                {/* IMAGE */}
                                 <div className="relative h-64 md:h-72 w-full rounded-[2rem] overflow-hidden mb-4 md:mb-6">
-                                    <Image src={item.img} alt={item.name} fill className="object-cover" />
+                                    <Image 
+                                        src={item.img} 
+                                        alt={item.name} 
+                                        fill 
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 85vw, 400px"
+                                        priority={item.id === 1}
+                                    />
                                 </div>
 
-                                {/* CONTENT */}
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center px-2 gap-2">
                                     <div>
                                         <h4 className="text-xl md:text-2xl font-bold text-[#1a3b3a] mb-1">{item.name}</h4>
@@ -85,7 +95,6 @@ export default function TopDestinations() {
                                         </div>
                                     </div>
 
-                                    {/* AVATAR STACK */}
                                     <div className="flex -space-x-3">
                                         <div className="h-8 w-8 md:h-10 md:w-10 rounded-full border-2 border-white overflow-hidden bg-slate-200">
                                             <img src={`https://i.pravatar.cc/150?u=${item.id}`} className="object-cover" alt="user" />
@@ -98,7 +107,7 @@ export default function TopDestinations() {
                                         </div>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         ))}
                     </motion.div>
                 </div>

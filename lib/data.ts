@@ -1,3 +1,58 @@
+export interface Package {
+    id: number;
+    title: string;
+    from: string;
+    to: string;
+    price: string;
+    image: string;
+    rating: number;
+    duration: string;
+}
+
+export interface Flight {
+    id: number;
+    airline: string;
+    logo: string;
+    aircraft: string;
+    fromCode: string;
+    toCode: string;
+    departureTime: string;
+    arrivalTime: string;
+    duration: string;
+    price: string;
+    stops: string;
+}
+
+export interface Airport {
+    id: string;
+    city: string;
+    name: string;
+    country: string;
+}
+
+export interface Vehicle {
+    id: number;
+    name: string;
+    type: string;
+    capacity: string;
+    price: string;
+    image: string;
+    location: string;
+    features: string[];
+}
+
+export const SITE_CONFIG = {
+    name: "JetSet Holidays",
+    phone: "+977 9841743706",
+    waPhone: "9779841743706",
+    email: "jetsetholidays36@gmail.com",
+    address: "Kathmandu, Nepal",
+    social: {
+        facebook: "https://www.facebook.com/Jetsetholiday/",
+        instagram: "https://www.instagram.com/jetsetholidays36",
+    }
+};
+
 export const LOCATIONS = ["Kathmandu", "Pokhara", "Lumbini", "Chitwan", "Lukla", "Rara Lake", "Biratnagar", "Bhairahawa", "Nepalgunj", "Dhangadhi", "Janakpur", "Bhadrapur", "Dubai", "New Delhi", "Doha", "Singapore", "London"];
 
 export const PACKAGES = [

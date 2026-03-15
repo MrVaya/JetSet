@@ -6,33 +6,29 @@ import {
     Phone,
     Mail,
     MapPin,
-    Send,
     MessageSquare,
-    Clock,
-    Facebook,
-    Instagram,
-    Twitter
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SITE_CONFIG } from "@/lib/data";
 
 const CONTACT_INFO = [
     {
         icon: Phone,
         label: "Call Us",
-        value: "+977 98417437060",
+        value: SITE_CONFIG.phone,
         description: "Sun-Fri from 9am to 6pm.",
     },
     {
         icon: Mail,
         label: "Email Us",
-        value: "jetsetholidaytravel@gmail.com",
+        value: SITE_CONFIG.email,
         description: "Our team usually responds within 24h.",
     },
     {
         icon: MapPin,
         label: "Visit Us",
-        value: "Kathmandu, Nepal",
-        description: "Latipur",
+        value: SITE_CONFIG.address,
+        description: "Corporate Office",
     },
 ];
 
@@ -54,7 +50,7 @@ export default function ContactPage() {
             return;
         }
 
-        const phoneNumber = "9779841743706"; // Your   number
+        const phoneNumber = SITE_CONFIG.waPhone; // Your   number
 
         // Construct the encoded message for WhatsApp
         const text = `*New Inquiry from JetSet*%0A%0A` +

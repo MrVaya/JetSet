@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
@@ -43,7 +44,9 @@ export default function Hero() {
 
                     {/* 3. THE SEARCH BAR (Modular Component) hidden on mobile */}
                     <div className="w-full hidden md:block">
-                        <HeroSearch />
+                        <React.Suspense fallback={<div className="h-32 bg-white/5 animate-pulse rounded-full" />}>
+                            <HeroSearch />
+                        </React.Suspense>
                     </div>
 
                 </div>

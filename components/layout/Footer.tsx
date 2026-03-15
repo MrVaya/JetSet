@@ -9,6 +9,7 @@ import {
     MessageCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SITE_CONFIG } from "@/lib/data";
 
 export default function Footer() {
     return (
@@ -31,8 +32,8 @@ export default function Footer() {
                     </p>
                     <div className="flex gap-4">
                         {[
-                            { Icon: Facebook, href: "https://www.facebook.com/Jetsetholiday/" },
-                            { Icon: Instagram, href: "https://www.instagram.com/jetsetholidays36" }
+                            { Icon: Facebook, href: SITE_CONFIG.social.facebook },
+                            { Icon: Instagram, href: SITE_CONFIG.social.instagram }
                         ].map((social, i) => (
                             <a
                                 key={i}
@@ -71,11 +72,11 @@ export default function Footer() {
                     <ul className="flex flex-col items-center md:items-start gap-5">
                         <li className="flex flex-col md:flex-row items-center md:items-start gap-3">
                             <MapPin className="h-5 w-5 text-[#079d9a] hidden md:block" />
-                            <span className="text-sm text-gray-300">Kathmandu, Nepal</span>
+                            <span className="text-sm text-gray-300">{SITE_CONFIG.address}</span>
                         </li>
                         <li className="flex flex-col md:flex-row items-center md:items-start gap-3">
                             <Phone className="h-5 w-5 text-[#079d9a] hidden md:block" />
-                            <span className="text-sm text-gray-300 font-bold">+977 9841743706</span>
+                            <span className="text-sm text-gray-300 font-bold">{SITE_CONFIG.phone}</span>
                         </li>
                     </ul>
                 </div>
@@ -90,7 +91,7 @@ export default function Footer() {
                             Need a custom itinerary or help with bookings? Our travel experts are ready.
                         </p>
                         <a
-                            href="https://api.whatsapp.com/send?phone=9779841743706&text=Hello%20JetSet%20Holidays!%20I%20would%20like%20to%20inquire%20about%20your%20travel%20packages%20and%20flights."
+                            href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=Hello%20JetSet%20Holidays!%20I%20would%20like%20to%20inquire%20about%20your%20travel%20packages%20and%20flights.`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block"
@@ -107,10 +108,10 @@ export default function Footer() {
             {/* Copyright Notice */}
             <div className="max-w-7xl mx-auto mt-16 md:mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p className="text-[10px] text-gray-500 uppercase tracking-widest text-center md:text-left">
-                    © {new Date().getFullYear()} JetSet Holidays
+                    © {new Date().getFullYear()} {SITE_CONFIG.name}
                 </p>
                 <div className="flex gap-6 text-[10px] text-gray-600 uppercase tracking-widest font-bold">
-                    • Developed by Nirvaya Ligal
+                    • Developed by Nirvaya Ligal |  Zentro Digital Services
                 </div>
             </div>
         </footer>

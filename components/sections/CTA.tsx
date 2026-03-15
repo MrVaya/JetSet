@@ -10,10 +10,10 @@ export default function CTA() {
                 </p>
                 <div className="flex flex-col md:flex-row justify-center gap-4">
                     <Button className="bg-white text-[#0a1f1e] hover:bg-gray-100 h-14 px-10 text-lg font-bold rounded-full transition-transform hover:scale-105">
-                        Book a Flight
+                        Get a Quote
                     </Button>
                     <Button variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white/10 h-14 px-10 text-lg font-bold rounded-full transition-transform hover:scale-105">
-                        Rent a Vehicle
+                        Check Vehicles
                     </Button>
                 </div>
             </div>

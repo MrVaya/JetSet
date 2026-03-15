@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { AIRPORTS } from "@/libs/data";
+import { AIRPORTS } from "@/lib/data";
 
 export default function HeroSearch() {
     const router = useRouter();
@@ -23,7 +23,7 @@ export default function HeroSearch() {
     // --- STATE ---
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState("flights");
-    
+
     // Flight States
     const [origin, setOrigin] = useState(searchParams.get("origin") || "");
     const [destination, setDestination] = useState(searchParams.get("destination") || "");
@@ -81,14 +81,14 @@ export default function HeroSearch() {
             <div className="flex justify-center">
                 <Tabs defaultValue="flights" className="w-auto" onValueChange={setActiveTab}>
                     <TabsList className="bg-white/20 backdrop-blur-md border border-white/30 p-1 rounded-full shadow-lg">
-                        <TabsTrigger 
-                            value="flights" 
+                        <TabsTrigger
+                            value="flights"
                             className="rounded-full px-8 py-2.5 data-[state=active]:bg-[#079d9a] data-[state=active]:text-white transition-all duration-300 gap-2 font-bold"
                         >
                             <Plane className="h-4 w-4" /> Flights
                         </TabsTrigger>
-                        <TabsTrigger 
-                            value="vehicles" 
+                        <TabsTrigger
+                            value="vehicles"
                             className="rounded-full px-8 py-2.5 data-[state=active]:bg-[#079d9a] data-[state=active]:text-white transition-all duration-300 gap-2 font-bold"
                         >
                             <Car className="h-4 w-4" /> Vehicle Rental

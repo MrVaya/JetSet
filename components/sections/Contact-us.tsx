@@ -1,6 +1,7 @@
-import { Reveal } from "@/components/shared/Reveal";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { RevealOnScroll as Reveal } from "@/components/shared/RevealOnScroll";
+import { SITE_CONFIG } from "@/lib/data";
 
 export default function ContactPage() {
     return (
@@ -14,9 +15,9 @@ export default function ContactPage() {
 
                     <div className="space-y-10 mt-12">
                         {[
-                            { icon: Phone, label: "Booking Line", val: "+1 (800) LUX-TRAVEL" },
-                            { icon: Mail, label: "Support Email", val: "concierge@premium-travel.com" },
-                            { icon: MapPin, label: "Headquarters", val: "77 Luxury Row, Dubai, UAE" },
+                            { icon: Phone, label: "Booking Line", val: SITE_CONFIG.phone },
+                            { icon: Mail, label: "Support Email", val: SITE_CONFIG.email },
+                            { icon: MapPin, label: "Headquarters", val: SITE_CONFIG.address },
                         ].map((item) => (
                             <div key={item.label} className="flex gap-6 items-center">
                                 <div className="h-14 w-14 rounded-2xl bg-[#2a6a62]/10 border border-[#2a6a62]/20 flex items-center justify-center">

@@ -1,20 +1,20 @@
 "use client";
 
-import { AIRPORTS, PACKAGES, VEHICLES } from "@/libs/data";
+import { AIRPORTS, PACKAGES, VEHICLES, Package, Vehicle, SITE_CONFIG } from "@/lib/data";
 import Image from "next/image";
 import { Star, MapPin, Plane, Calendar, Users, Car, CheckCircle2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import React, { use } from "react";
+import React, { use, Suspense } from "react";
 import { cn } from "@/lib/utils";
 
-export default function ServicesPage({
+function ServicesContent({
     searchParams,
 }: {
     searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
-    const params = use(searchParams);
+    const params = React.use(searchParams);
 
     const isVehicle = params.type === "vehicle";
     const originCode = params.origin;
@@ -32,22 +32,11 @@ export default function ServicesPage({
     const filteredVehicles = VEHICLES.filter(v => {
         const matchesLocation = !locationCode || v.location === locationCode;
         return matchesLocation;
-    }); 
+    });
 
     const displayItems = isVehicle ? filteredVehicles : filteredPackages;
     const title = isVehicle ? "Premium Vehicle Rentals" : "Available Travel Packages";
     const foundText = isVehicle ? "Vehicles Found" : "Packages Found";
-
-    const updateType = (type: string) => {
-        const url = new URL(window.location.href);
-        if (type === "vehicle") {
-            url.searchParams.set("type", "vehicle");
-        } else {
-            url.searchParams.delete("type");
-        }
-        window.history.pushState({}, '', url.toString());
-        // Force a re-render or use router.push. Since this is "use client", we can use router.
-    };
 
     const container = {
         hidden: { opacity: 0 },
@@ -69,7 +58,7 @@ export default function ServicesPage({
             <div className="max-w-7xl mx-auto">
 
                 {/* Search Header Summary */}
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-[#079d9a]/5 border border-[#079d9a]/10 rounded-[2rem] p-8 mb-12 flex flex-col md:flex-row justify-between items-center gap-6"
@@ -91,7 +80,7 @@ export default function ServicesPage({
 
                         {/* DESKTOP TOGGLE */}
                         <div className="flex bg-slate-100 p-1 rounded-xl w-fit">
-                            <button 
+                            <button
                                 onClick={() => {
                                     const newParams = new URLSearchParams(window.location.search);
                                     newParams.delete("type");
@@ -101,7 +90,7 @@ export default function ServicesPage({
                             >
                                 TRAVEL PACKAGES
                             </button>
-                            <button 
+                            <button
                                 onClick={() => {
                                     const newParams = new URLSearchParams(window.location.search);
                                     newParams.set("type", "vehicle");
@@ -121,32 +110,32 @@ export default function ServicesPage({
                 </motion.div>
 
                 {/* Results Grid */}
-                <motion.div 
+                <motion.div
                     variants={container}
                     initial="hidden"
                     animate="show"
                     className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-8"
                 >
-                    {displayItems.map((item: any) => (
-                        <motion.div 
+                    {displayItems.map((item: Package | Vehicle) => (
+                        <motion.div
                             variants={itemAnim}
-                            key={item.id} 
-                            className="bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 group"
+                            key={item.id}
+                            className="bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 group flex flex-col"
                         >
                             <div className="relative h-40 md:h-64 overflow-hidden">
                                 <Image
                                     src={item.image}
-                                    alt={isVehicle ? item.name : item.title}
+                                    alt={'name' in item ? item.name : item.title}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
-                                {!isVehicle && (
+                                {!isVehicle && 'rating' in item && (
                                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1">
                                         <Star className="w-3 h-3 text-orange-500 fill-orange-500" />
                                         <span className="text-xs font-bold text-slate-800">{item.rating}</span>
                                     </div>
                                 )}
-                                {isVehicle && (
+                                {isVehicle && 'type' in item && (
                                     <div className="absolute top-4 right-4 bg-[#079d9a] text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
                                         {item.type}
                                     </div>
@@ -156,13 +145,13 @@ export default function ServicesPage({
                             <div className="p-4 md:p-8 flex flex-col flex-grow">
                                 <div className="mb-2 md:mb-4">
                                     <h3 className="text-base md:text-xl font-black text-slate-900 line-clamp-2 leading-tight mb-1">
-                                        {isVehicle ? item.name : item.title}
+                                        {'name' in item ? item.name : item.title}
                                     </h3>
-                                    <span className="text-base md:text-xl font-black text-[#079d9a]">{item.price}</span>
+                                    <span className="text-[10px] md:text-xs font-bold text-[#079d9a] uppercase tracking-widest bg-[#079d9a]/5 px-2 py-1 rounded">Best Price Guaranteed</span>
                                 </div>
 
                                 <p className="text-slate-500 text-[10px] md:text-sm mb-4 md:mb-6 leading-relaxed line-clamp-2">
-                                    {isVehicle ? `${item.capacity} capacity with professional local driver.` : `${item.duration} Premium Package including luxury accommodation and local experiences.`}
+                                    {isVehicle && 'capacity' in item ? `${item.capacity} capacity with professional local driver.` : `${'duration' in item ? item.duration : ''} Premium Package including luxury accommodation and local experiences.`}
                                 </p>
 
                                 <div className="mt-auto flex items-center justify-between pt-4 md:pt-6 border-t border-slate-50 gap-2">
@@ -172,30 +161,29 @@ export default function ServicesPage({
                                                 View Details
                                             </button>
                                         </DialogTrigger>
-                                        {/* DialogContent remains the same */}
                                         <DialogContent className="max-w-2xl bg-white rounded-[2rem] p-0 overflow-hidden border-none shadow-2xl">
                                             <div className="grid md:grid-cols-2 h-full">
                                                 <div className="relative h-64 md:h-full">
-                                                    <Image src={item.image} alt={isVehicle ? item.name : item.title} fill className="object-cover" />
+                                                    <Image src={item.image} alt={'name' in item ? item.name : item.title} fill className="object-cover" />
                                                 </div>
                                                 <div className="p-8">
                                                     <DialogHeader>
                                                         <div className="flex items-center gap-2 mb-2">
                                                             <span className="px-2 py-0.5 bg-[#079d9a]/10 text-[#079d9a] rounded text-[10px] font-bold uppercase tracking-widest">
-                                                                {isVehicle ? item.type : "Global Hotspot"}
+                                                                {isVehicle && 'type' in item ? item.type : "Global Hotspot"}
                                                             </span>
                                                         </div>
-                                                        <DialogTitle className="text-2xl font-bold text-slate-900 mb-4">{isVehicle ? item.name : item.title}</DialogTitle>
+                                                        <DialogTitle className="text-2xl font-bold text-slate-900 mb-4">{'name' in item ? item.name : item.title}</DialogTitle>
                                                     </DialogHeader>
                                                     <div className="space-y-4 my-6">
                                                         <p className="text-sm text-slate-500 leading-relaxed">
-                                                            {isVehicle 
+                                                            {isVehicle
                                                                 ? "Experience comfortable travel across Nepal with our premium fleet. Reliable, safe, and professional."
                                                                 : "Discover breathtaking landscapes and rich culture with our meticulously planned luxury tours."
                                                             }
                                                         </p>
                                                         <div className="grid grid-cols-1 gap-2">
-                                                            {(isVehicle ? item.features : ["Luxury Stay", "Local Guide", "Flights Included", "Daily Breakfast"]).map((feat: string) => (
+                                                            {(isVehicle && 'features' in item ? item.features : ["Luxury Stay", "Local Guide", "Flights Included", "Daily Breakfast"]).map((feat: string) => (
                                                                 <div key={feat} className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                                                                     <CheckCircle2 className="h-4 w-4 text-[#079d9a]" />
                                                                     {feat}
@@ -204,14 +192,14 @@ export default function ServicesPage({
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center justify-between pt-6 border-t border-slate-100">
-                                                        <span className="text-2xl font-black text-[#079d9a]">{item.price}</span>
+                                                        <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Get Best Quote</span>
                                                         <a
-                                                            href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Booking Inquiry*\n*Item:* ${isVehicle ? item.name : item.title}\n*Price:* ${item.price}`)}`}
+                                                            href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Price Inquiry*\n*Item:* ${'name' in item ? item.name : item.title}\n\nPlease provide the current price and availability.`)}`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                         >
                                                             <Button className="bg-[#079d9a] hover:bg-[#068a87] text-white rounded-xl px-6 font-bold uppercase text-[10px] tracking-widest group">
-                                                                Book This Now
+                                                                Contact Us
                                                             </Button>
                                                         </a>
                                                     </div>
@@ -221,13 +209,13 @@ export default function ServicesPage({
                                     </Dialog>
 
                                     <a
-                                        href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Booking Inquiry*\n*${isVehicle ? "Vehicle" : "Package"}:* ${isVehicle ? item.name : item.title}`)}`}
+                                        href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Booking Inquiry*\n*${isVehicle ? "Vehicle" : "Package"}:* ${'name' in item ? item.name : item.title}`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-block"
                                     >
                                         <button className="bg-[#079d9a] text-white px-3 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-black text-[9px] md:text-xs uppercase tracking-widest hover:bg-[#068a87] active:scale-95 transition-all shadow-lg shadow-[#079d9a]/20">
-                                            Book Now
+                                            Contact Us
                                         </button>
                                     </a>
                                 </div>
@@ -238,7 +226,7 @@ export default function ServicesPage({
 
                 {/* Empty State */}
                 {displayItems.length === 0 && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="text-center py-20"
@@ -248,5 +236,13 @@ export default function ServicesPage({
                 )}
             </div>
         </main>
+    );
+}
+
+export default function ServicesPage(props: any) {
+    return (
+        <Suspense fallback={<div className="min-h-screen pt-36 px-6 max-w-7xl mx-auto"><div className="h-64 bg-slate-50 animate-pulse rounded-[2.5rem]" /></div>}>
+            <ServicesContent {...props} />
+        </Suspense>
     );
 }

@@ -1,13 +1,13 @@
 "use client";
 
-import { AIRPORTS, FLIGHTS } from "@/libs/data";
+import { AIRPORTS, FLIGHTS, Flight, SITE_CONFIG } from "@/lib/data";
 import { Plane, Calendar, Users, MapPin, Clock, ArrowRight, ShieldCheck, Briefcase, Coffee, MessageCircle } from "lucide-react";
 import Image from "next/image";
-import React, { use } from "react";
+import React, { use, Suspense } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export default function TicketingPage({
+function TicketingContent({
     searchParams,
 }: {
     searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -95,7 +95,7 @@ export default function TicketingPage({
                     animate="show"
                     className="space-y-4 md:space-y-6"
                 >
-                    {filteredFlights.map((flight) => (
+                    {filteredFlights.map((flight: Flight) => (
                         <motion.div
                             variants={itemAnim}
                             key={flight.id}
@@ -160,17 +160,17 @@ export default function TicketingPage({
                                 {/* Action & Price Section */}
                                 <div className="flex-shrink-0 lg:border-l lg:border-slate-50 pt-4 md:pt-6 lg:pt-0 lg:pl-10 flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4 md:gap-6 min-w-full sm:min-w-[180px]">
                                     <div className="text-left lg:text-right">
-                                        <p className="text-[8px] md:text-[10px] uppercase font-bold text-slate-300 tracking-[0.2em] mb-0.5 md:mb-1">Total Fare</p>
-                                        <p className="text-2xl md:text-4xl font-black text-[#079d9a]">{flight.price}</p>
+                                        <p className="text-[8px] md:text-[10px] uppercase font-bold text-slate-300 tracking-[0.2em] mb-0.5 md:mb-1">Current Fare</p>
+                                        <p className="text-sm font-bold text-[#079d9a] uppercase tracking-widest bg-[#079d9a]/5 px-2 py-1 rounded">Check Availability</p>
                                     </div>
                                     <a
-                                        href={`https://api.whatsapp.com/send?phone=9779841743706&text=${encodeURIComponent(`*Booking Flight Ticket*\n*Airline:* ${flight.airline}\n*Route:* ${flight.fromCode} to ${flight.toCode}\n*Time:* ${flight.departureTime}\n*Fare:* ${flight.price}`)}`}
+                                        href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Flight Inquiry*\n*Airline:* ${flight.airline}\n*Route:* ${flight.fromCode} → ${flight.toCode}\n*Date:* ${dateStr}\n\nPlease check availability and provide current fare.`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="flex-grow sm:flex-grow-0"
                                     >
                                         <button className="w-full bg-[#079d9a] hover:bg-emerald-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest shadow-xl shadow-[#079d9a]/20 hover:shadow-emerald-500/20 transition-all duration-300 flex items-center justify-center gap-2">
-                                            <MessageCircle className="w-4 h-4 fill-white/20" /> Book on WhatsApp
+                                            <MessageCircle className="w-4 h-4 fill-white/20" /> Check on WhatsApp
                                         </button>
                                     </a>
                                 </div>
@@ -217,5 +217,13 @@ export default function TicketingPage({
                 </motion.div>
             </div>
         </main>
+    );
+}
+
+export default function TicketingPage(props: any) {
+    return (
+        <Suspense fallback={<div className="min-h-screen pt-36 px-6 max-w-6xl mx-auto"><div className="h-64 bg-white animate-pulse rounded-[2.5rem]" /></div>}>
+            <TicketingContent {...props} />
+        </Suspense>
     );
 }
