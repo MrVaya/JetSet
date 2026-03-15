@@ -71,7 +71,7 @@ export default function HeroSearch() {
             params.set("type", "vehicle");
 
             setTimeout(() => {
-                router.push(`/services?${params.toString()}`);
+                router.push(`/ticketing?${params.toString()}`);
             }, 800);
         }
     };

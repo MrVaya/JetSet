@@ -66,8 +66,18 @@ export default function TopDestinations() {
                 {/* SLIDER CONTAINER */}
                 <div className="relative">
                     <motion.div
-                        className="flex gap-6 md:gap-8"
+                        className="flex gap-6 md:gap-8 cursor-grab active:cursor-grabbing"
+                        drag="x"
+                        dragConstraints={{ left: -((destinations.length - 1) * cardWidth), right: 0 }}
                         animate={{ x: -(index * cardWidth) }}
+                        onDragEnd={(e, { offset, velocity }) => {
+                            const swipe = offset.x;
+                            if (swipe < -50 && index < destinations.length - 1) {
+                                nextStep();
+                            } else if (swipe > 50 && index > 0) {
+                                prevStep();
+                            }
+                        }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     >
                         {destinations.map((item) => (

@@ -144,61 +144,67 @@ function ServicesContent({
 
                             <div className="p-4 md:p-8 flex flex-col flex-grow">
                                 <div className="mb-2 md:mb-4">
-                                    <h3 className="text-base md:text-xl font-black text-slate-900 line-clamp-2 leading-tight mb-1">
+                                    <h3 className="text-[13px] md:text-xl font-black text-slate-900 line-clamp-2 leading-tight mb-1">
                                         {'name' in item ? item.name : item.title}
                                     </h3>
-                                    <span className="text-[10px] md:text-xs font-bold text-[#079d9a] uppercase tracking-widest bg-[#079d9a]/5 px-2 py-1 rounded">Best Price Guaranteed</span>
+                                    <div className="hidden md:flex flex-wrap gap-1">
+                                        <span className="text-[8px] md:text-xs font-bold text-[#079d9a] uppercase tracking-widest bg-[#079d9a]/5 px-1.5 py-0.5 rounded">Best Price</span>
+                                        <span className="text-[8px] md:text-xs font-bold text-[#079d9a] uppercase tracking-widest bg-[#079d9a]/5 px-1.5 py-0.5 rounded">Guaranteed</span>
+                                    </div>
                                 </div>
 
                                 <p className="text-slate-500 text-[10px] md:text-sm mb-4 md:mb-6 leading-relaxed line-clamp-2">
                                     {isVehicle && 'capacity' in item ? `${item.capacity} capacity with professional local driver.` : `${'duration' in item ? item.duration : ''} Premium Package including luxury accommodation and local experiences.`}
                                 </p>
 
-                                <div className="mt-auto flex items-center justify-between pt-4 md:pt-6 border-t border-slate-50 gap-2">
+                                <div className="mt-auto flex flex-col sm:flex-row items-center justify-between pt-3 md:pt-6 border-t border-slate-50 gap-3">
                                     <Dialog>
                                         <DialogTrigger asChild>
-                                            <button className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-[#079d9a] transition-colors whitespace-nowrap">
+                                            <button className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-[#079d9a] transition-colors whitespace-nowrap order-2 sm:order-1">
                                                 View Details
                                             </button>
                                         </DialogTrigger>
-                                        <DialogContent className="max-w-2xl bg-white rounded-[2rem] p-0 overflow-hidden border-none shadow-2xl">
+                                        <DialogContent className="sm:max-w-4xl max-w-[95vw] bg-white rounded-[2rem] p-0 overflow-hidden border-none shadow-2xl">
                                             <div className="grid md:grid-cols-2 h-full">
                                                 <div className="relative h-64 md:h-full">
                                                     <Image src={item.image} alt={'name' in item ? item.name : item.title} fill className="object-cover" />
                                                 </div>
-                                                <div className="p-8">
-                                                    <DialogHeader>
-                                                        <div className="flex items-center gap-2 mb-2">
-                                                            <span className="px-2 py-0.5 bg-[#079d9a]/10 text-[#079d9a] rounded text-[10px] font-bold uppercase tracking-widest">
+                                                <div className="p-8 md:p-12 flex flex-col h-full">
+                                                    <DialogHeader className="mb-6">
+                                                        <div className="flex items-center gap-2 mb-3">
+                                                            <span className="px-3 py-1 bg-[#079d9a]/10 text-[#079d9a] rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
                                                                 {isVehicle && 'type' in item ? item.type : "Global Hotspot"}
                                                             </span>
                                                         </div>
-                                                        <DialogTitle className="text-2xl font-bold text-slate-900 mb-4">{'name' in item ? item.name : item.title}</DialogTitle>
+                                                        <DialogTitle className="text-3xl font-black text-slate-900 leading-tight">{'name' in item ? item.name : item.title}</DialogTitle>
                                                     </DialogHeader>
-                                                    <div className="space-y-4 my-6">
-                                                        <p className="text-sm text-slate-500 leading-relaxed">
+                                                    <div className="space-y-6 mb-8">
+                                                        <p className="text-base text-slate-500 leading-relaxed font-medium">
                                                             {isVehicle
                                                                 ? "Experience comfortable travel across Nepal with our premium fleet. Reliable, safe, and professional."
                                                                 : "Discover breathtaking landscapes and rich culture with our meticulously planned luxury tours."
                                                             }
                                                         </p>
-                                                        <div className="grid grid-cols-1 gap-2">
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                             {(isVehicle && 'features' in item ? item.features : ["Luxury Stay", "Local Guide", "Flights Included", "Daily Breakfast"]).map((feat: string) => (
-                                                                <div key={feat} className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                                                                    <CheckCircle2 className="h-4 w-4 text-[#079d9a]" />
+                                                                <div key={feat} className="flex items-center gap-3 text-xs md:text-sm font-bold text-slate-700 bg-slate-50/50 p-3 rounded-2xl border border-slate-100">
+                                                                    <CheckCircle2 className="h-4 w-4 text-[#079d9a] shrink-0" />
                                                                     {feat}
                                                                 </div>
                                                             ))}
                                                         </div>
                                                     </div>
-                                                    <div className="flex items-center justify-between pt-6 border-t border-slate-100">
-                                                        <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Get Best Quote</span>
+                                                    <div className="flex items-center justify-between pt-6 border-t border-slate-100 mt-auto">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Starting from</span>
+                                                            <span className="text-2xl font-black text-[#079d9a]">{'price' in item ? item.price : "Enquire"}</span>
+                                                        </div>
                                                         <a
                                                             href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Price Inquiry*\n*Item:* ${'name' in item ? item.name : item.title}\n\nPlease provide the current price and availability.`)}`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                         >
-                                                            <Button className="bg-[#079d9a] hover:bg-[#068a87] text-white rounded-xl px-6 font-bold uppercase text-[10px] tracking-widest group">
+                                                            <Button className="bg-[#079d9a] hover:bg-[#068a87] text-white rounded-xl px-8 h-12 font-bold uppercase text-[11px] tracking-widest group shadow-lg shadow-[#079d9a]/20 transition-all hover:scale-105 active:scale-95">
                                                                 Contact Us
                                                             </Button>
                                                         </a>
@@ -212,9 +218,9 @@ function ServicesContent({
                                         href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Booking Inquiry*\n*${isVehicle ? "Vehicle" : "Package"}:* ${'name' in item ? item.name : item.title}`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-block"
+                                        className="w-full sm:w-auto order-1 sm:order-2"
                                     >
-                                        <button className="bg-[#079d9a] text-white px-3 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-black text-[9px] md:text-xs uppercase tracking-widest hover:bg-[#068a87] active:scale-95 transition-all shadow-lg shadow-[#079d9a]/20">
+                                        <button className="w-full sm:w-auto bg-[#079d9a] text-white px-2.5 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-black text-[8px] md:text-xs uppercase tracking-widest hover:bg-[#068a87] active:scale-95 transition-all shadow-lg shadow-[#079d9a]/20">
                                             Contact Us
                                         </button>
                                     </a>

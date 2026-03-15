@@ -437,33 +437,62 @@ export const AIRPORTS = [
 export const VEHICLES = [
     {
         id: 301,
-        name: "Toyota Hiace (Premium)",
-        type: "Bus",
-        capacity: "12-14 Seats",
-        price: "$120/day",
-        image: "/hiace.jpg",
+        name: "Vintage Wedding Car",
+        type: "Wedding/Marriage Special",
+        capacity: "4 Seats",
+        price: "$150/day",
+        image: "/wedding-car.png",
         location: "KTM",
-        features: ["Air Conditioning", "WiFi", "Professional Driver", "Luggage Space"]
+        features: ["Flower Decoration included", "Professional Chauffeur", "VIP Treatment", "Premium Sound System"]
     },
     {
         id: 302,
-        name: "Scorpio 4WD (Classic)",
-        type: "Scorpio",
+        name: "Toyota Hiace VIP (Corporate)",
+        type: "Corporate VIP Travel",
+        capacity: "12 Seats",
+        price: "$130/day",
+        image: "/corporate-van.png",
+        location: "KTM",
+        features: ["Leather Captain Seats", "High-speed WiFi", "Conference Table", "Refreshments provided"]
+    },
+    {
+        id: 303,
+        name: "Land Cruiser 4x4 (V8)",
+        type: "Off-Road Specialist",
+        capacity: "7 Seats",
+        price: "$280/day",
+        image: "/offroad-jeep.png",
+        location: "PKR",
+        features: ["Extreme Off-Road Ready", "Luxury Interior", "English Speaking Driver", "Satellite Navigation"]
+    },
+    {
+        id: 304,
+        name: "Toyota Hiace  ",
+        type: "Bus/Group Travel",
+        capacity: "14 Seats",
+        price: "$120/day",
+        image: "/hiace.jpg",
+        location: "KTM",
+        features: ["Air Conditioning", "Ample Luggage Space", "Professional Local Driver", "Safety Belts on all seats"]
+    },
+    {
+        id: 305,
+        name: "Scorpio 4WD (Standard)",
+        type: "Mountain Trekking Jeep",
         capacity: "7 Seats",
         price: "$85/day",
         image: "/scorpio.jpg",
         location: "PKR",
-        features: ["Off-road capable", "Air Conditioning", "Local Driver", "Mountain Ready"]
+        features: ["Rugged Performance", "Air Conditioning", "Local Expert Driver", "Mountain Proven"]
     },
     {
-        id: 303,
-        name: "Suv",
-        type: "Luxury SUV",
-        capacity: "5 Seats",
-        price: "$250/day",
+        id: 306,
+        name: "All Types of Car  ",
+        type: "Executive",
+        capacity: "4 Seats",
+        price: "$350/day",
         image: "/suv.avif",
         location: "KTM",
-        features: ["Ultimate Luxury", "High Clearance", "English Speaking Driver", "Safety Kit"]
-    },
-
+        features: ["Ultimate Prestige", "Privacy Glass", "Bilingual Driver", "On-board Bar"]
+    }
 ];
