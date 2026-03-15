@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const destinations = [
-    { id: 1, name: "Thailand", country: "Thailand", img: "/thailand.jpg", visitors: 10 },
+    { id: 1, name: "Maldives", country: "Maldives", img: "/Maldives.avif", visitors: 10 },
     { id: 2, name: "Chitwan National Park", country: "Nepal", img: "/chitwan.jpg", visitors: 18 },
     { id: 3, name: "Paris", country: "France", img: "/paris.jpg", visitors: 25 },
     { id: 4, name: "Dubai", country: "UAE", img: "/dubai.jpg", visitors: 30 },

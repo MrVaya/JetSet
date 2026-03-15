@@ -20,10 +20,10 @@ const DESTINATIONS = [
         link: "/services?location=manang"
     },
     {
-        title: "Rara Lake, Nepal",
-        desc: "The largest and deepest freshwater lake in the Nepal Himalayas.",
+        title: "Kerala",
+        desc: "The amazing jungle safari to experinence the wild.",
 
-        img: "/Rara-Lake.jpg",
+        img: "/kerala.jpg",
         link: "/services?location=rara"
     },
     {
