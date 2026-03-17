@@ -10,31 +10,26 @@ const TESTIMONIALS = [
         id: 0,
         name: "Aayam Shrestha ",
         text: '"Memories of a lifetime" Thank you for finding our dream honeymoon spot. The service was impeccable , We Loved it',
-        img: "https://i.pravatar.cc/150?u=elena",
     },
     {
         id: 1,
         name: "Anny Stack",
         text: '"Excellence in every mile" The attention to detail in their flight packages is unmatched. I felt like a VIP from takeoff to landing.',
-        img: "https://i.pravatar.cc/150?u=john",
     },
     {
         id: 2,
         name: "Sabin Rai",
         text: 'Really appreciate the help and support from the staff during my trips. Very helpful.',
-        img: "https://i.pravatar.cc/150?u=alice",
     },
     {
         id: 3,
         name: "Charlotte Flare",
         text: 'The  transportation was the highlight. The SUV was brand new and the driver was extremely professional.',
-        img: "https://i.pravatar.cc/150?u=michael",
     },
     {
         id: 4,
         name: "Sarah Jenkins",
         text: 'I never thought booking a flight in Nepal could be this stress-free. JetSet handled everything.',
-        img: "https://i.pravatar.cc/150?u=sarah",
     },
 ];
 
@@ -49,7 +44,7 @@ export default function Testimonials() {
         <section className="w-full relative py-12 px-0 bg-white">
             {/* The main container now spans full width but has rounded edges if you prefer the "floating" design, 
           or remove rounded-none for a true edge-to-edge cinematic look */}
-            <div className="relative w-full h-[650px] md:h-[700px] overflow-hidden flex flex-col items-center justify-center text-center">
+            <div className="relative w-full h-[600px] md:h-[650px] overflow-hidden flex flex-col items-center justify-center text-center">
 
                 {/* BACKGROUND IMAGE - Spans 100% of viewport */}
                 <div className="absolute inset-0 z-0">
@@ -81,7 +76,7 @@ export default function Testimonials() {
                     </div>
 
                     {/* Quote & Name Transition */}
-                    <div className="min-h-[160px] flex flex-col justify-center mb-10">
+                    <div className="min-h-[160px] flex flex-col justify-center mb-6">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={active}
@@ -98,22 +93,6 @@ export default function Testimonials() {
                                 </h4>
                             </motion.div>
                         </AnimatePresence>
-                    </div>
-
-                    {/* Face Slider Group */}
-                    <div className="flex items-center justify-center gap-3 md:gap-6 mt-6">
-                        {TESTIMONIALS.map((person, idx) => (
-                            <button
-                                key={person.id}
-                                onClick={() => setActive(idx)}
-                                className={`relative transition-all duration-500 rounded-full border-2 ${active === idx
-                                    ? "w-20 h-20 md:w-28 md:h-28 border-[#079d9a] scale-110 shadow-2xl z-20"
-                                    : "w-12 h-12 md:w-16 md:h-16 border-white/20 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 z-10"
-                                    } overflow-hidden`}
-                            >
-                                <img src={person.img} alt={person.name} className="w-full h-full object-cover" />
-                            </button>
-                        ))}
                     </div>
 
                     {/* Modern Pagination Dots */}

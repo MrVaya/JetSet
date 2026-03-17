@@ -15,8 +15,10 @@ const NAV_LINKS = [
   { name: "Home", href: "/" },
   { name: "Packages", href: "/services" },
   { name: "Flights", href: "/ticketing" },
+  { name: "Visa  ", href: "/visa" },
   { name: "About Us", href: "/about" },
   { name: "Contact", href: "/contact" },
+
 ];
 
 export default function Navbar() {

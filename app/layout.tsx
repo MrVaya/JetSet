@@ -11,6 +11,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://jetset-travels.vercel.app'), // Use your actual URL once deployed
+
+
   title: "JetSet Holidays",
   description: "Experience the best of Nepal with JetSet Holidays. We offer premium travel packages, reliable flight ticketing, and expert local transportation services for your dream vacation.",
   keywords: ["Nepal Travel", "Flight Booking Nepal", "Luxury Tours Nepal", "Vehicle Rental Kathmandu", "JetSet Holidays", "Travel Agency Nepal"],

@@ -607,24 +607,15 @@ export const VEHICLES = [
     },
     {
         id: 304,
-        name: "Toyota Hiace  ",
-        type: "Bus/Group Travel",
-        capacity: "14 Seats",
-
-        image: "/hiace.jpg",
-        location: "KTM",
-        features: ["Air Conditioning", "Ample Luggage Space", "Professional Local Driver", "Safety Belts on all seats"]
-    },
-    {
-        id: 305,
-        name: "Scorpio 4WD (Standard)",
-        type: "Mountain Trekking Jeep",
+        name: "Scorpio Jeep   ",
+        type: "Group Travel",
         capacity: "7 Seats",
 
         image: "/scorpio.jpg",
-        location: "PKR",
-        features: ["Rugged Performance", "Air Conditioning", "Local Expert Driver", "Mountain Proven"]
+        location: "KTM",
+        features: ["Air Conditioning", "Professional Local Driver", "Off Road Rides"]
     },
+
     {
         id: 306,
         name: "All Types of Car  ",
