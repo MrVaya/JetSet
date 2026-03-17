@@ -15,9 +15,7 @@ export async function GET(request: Request) {
             return NextResponse.json(filtered);
         }
 
-        // 2. DEFAULT: If no search params, return all flights 
-        // (We show 10 flights so the page looks full)
-        return NextResponse.json(FLIGHTS.slice(0, 12));
+        return NextResponse.json(FLIGHTS);
 
     } catch (error) {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Plane, MapPin, Clock, ShieldCheck, ArrowRight, MessageSquare, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SITE_CONFIG } from "@/lib/data";
+import { SITE_CONFIG, AIRPORTS } from "@/lib/data";
 
 export default function TicketingPage() {
     return (
@@ -67,7 +67,7 @@ function TicketingContent() {
                             </span>
                             <h1 className="text-3xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
                                 {origin && destination ? (
-                                    <>Discover Flights to <br /> <span className="text-[#079d9a]">{destination}</span></>
+                                    <>Discover Flights to <br /> <span className="text-[#079d9a]">{AIRPORTS.find(a => a.id === destination.toUpperCase())?.city || destination}</span></>
                                 ) : (
                                     <>Explore Nepal's <br /> <span className="text-[#079d9a]">Luxury Routes</span></>
                                 )}
@@ -133,7 +133,9 @@ function TicketingContent() {
                                     <div className="text-center md:text-left">
                                         <p className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter mb-1 leading-none">{f.departureTime}</p>
                                         <div className="flex flex-col items-center md:items-start leading-none">
-                                            <p className="text-xs md:text-sm font-black text-[#079d9a] uppercase tracking-widest">{f.fromCode}</p>
+                                            <p className="text-xs md:text-sm font-black text-[#079d9a] uppercase tracking-widest">
+                                                {AIRPORTS.find(a => a.id === f.fromCode)?.city || f.fromCode}
+                                            </p>
                                             <p className="text-[8px] md:text-[9px] font-bold text-slate-300 uppercase tracking-tighter mt-1">Departs</p>
                                         </div>
                                     </div>
@@ -164,7 +166,9 @@ function TicketingContent() {
                                     <div className="text-center md:text-right">
                                         <p className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter mb-1 leading-none">{f.arrivalTime}</p>
                                         <div className="flex flex-col items-center md:items-end leading-none">
-                                            <p className="text-xs md:text-sm font-black text-[#079d9a] uppercase tracking-widest">{f.toCode}</p>
+                                            <p className="text-xs md:text-sm font-black text-[#079d9a] uppercase tracking-widest">
+                                                {AIRPORTS.find(a => a.id === f.toCode)?.city || f.toCode}
+                                            </p>
                                             <p className="text-[8px] md:text-[9px] font-bold text-slate-300 uppercase tracking-tighter mt-1">Arrives</p>
                                         </div>
                                     </div>
@@ -173,7 +177,7 @@ function TicketingContent() {
                                 {/* Call to Action */}
                                 <div className="flex flex-row lg:flex-col items-center lg:items-end justify-center w-full lg:w-auto lg:pl-10 lg:border-l border-slate-50 pt-6 lg:pt-0 border-t lg:border-t-0 mt-2 lg:mt-0">
                                     <a
-                                        href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Elite Flight Booking*\n*Airline:* ${f.airline}\n*Flight:* ${f.aircraft}\n*Route:* ${f.fromCode} → ${f.toCode}\n*Time:* ${f.departureTime} - ${f.arrivalTime}\n\nI'd like to reserve a seat and verify current pricing.`)}`}
+                                        href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Elite Flight Booking*\n*Airline:* ${f.airline}\n*Flight:* ${f.aircraft}\n*Route:* ${AIRPORTS.find(a => a.id === f.fromCode)?.city || f.fromCode} → ${AIRPORTS.find(a => a.id === f.toCode)?.city || f.toCode}\n*Time:* ${f.departureTime} - ${f.arrivalTime}\n\nI'd like to reserve a seat and verify current pricing.`)}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-block"

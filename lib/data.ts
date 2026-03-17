@@ -319,19 +319,7 @@ export const FLIGHTS = [
 
         stops: "Non-stop"
     },
-    {
-        id: 106,
-        airline: "Yeti Airlines",
-        logo: "/yeti-airlines.png",
-        aircraft: "ATR 72-500",
-        fromCode: "KTM",
-        toCode: "KEP",
-        departureTime: "02:30 PM",
-        arrivalTime: "03:25 PM",
-        duration: "55m",
 
-        stops: "Non-stop"
-    },
     {
         id: 107,
         airline: "Buddha Air",
@@ -345,19 +333,7 @@ export const FLIGHTS = [
 
         stops: "Non-stop"
     },
-    {
-        id: 108,
-        airline: "Shree Airlines",
-        logo: "/shree-airline.png",
-        aircraft: "Bombardier Dash 8",
-        fromCode: "KTM",
-        toCode: "JKR",
-        departureTime: "10:45 AM",
-        arrivalTime: "11:15 AM",
-        duration: "30m",
 
-        stops: "Non-stop"
-    },
     {
         id: 109,
         airline: "Buddha Air",
@@ -491,58 +467,7 @@ export const FLIGHTS = [
 
         stops: "Non-stop"
     },
-    {
-        id: 205,
-        airline: "Thai Airways",
-        logo: "https://images.kiwi.com/airlines/64/TG.png",
-        aircraft: "Airbus A350-900",
-        fromCode: "KTM",
-        toCode: "BKK",
-        departureTime: "01:30 PM",
-        arrivalTime: "06:15 PM",
-        duration: "3h 30m",
 
-        stops: "Non-stop"
-    },
-    {
-        id: 206,
-        airline: "Turkish Airlines",
-        logo: "https://images.kiwi.com/airlines/64/TK.png",
-        aircraft: "Airbus A330-300",
-        fromCode: "KTM",
-        toCode: "IST",
-        departureTime: "07:35 AM",
-        arrivalTime: "12:55 PM",
-        duration: "8h 05m",
-
-        stops: "Non-stop"
-    },
-    {
-        id: 207,
-        airline: "Malaysian Airlines",
-        logo: "https://images.kiwi.com/airlines/64/MH.png",
-        aircraft: "Boeing 737-800",
-        fromCode: "KTM",
-        toCode: "KUL",
-        departureTime: "11:20 PM",
-        arrivalTime: "06:10 AM",
-        duration: "4h 50m",
-
-        stops: "Non-stop"
-    },
-    {
-        id: 208,
-        airline: "Maldivian",
-        logo: "https://images.kiwi.com/airlines/64/Q2.png",
-        aircraft: "Airbus A320",
-        fromCode: "KTM",
-        toCode: "MLE",
-        departureTime: "09:45 AM",
-        arrivalTime: "01:20 PM",
-        duration: "4h 50m",
-
-        stops: "Non-stop"
-    }
 ];
 
 export const AIRPORTS = [
@@ -611,7 +536,7 @@ export const VEHICLES = [
         type: "Group Travel",
         capacity: "7 Seats",
 
-        image: "/scorpio.jpg",
+        image: "/scorpio1.jpg",
         location: "KTM",
         features: ["Air Conditioning", "Professional Local Driver", "Off Road Rides"]
     },
