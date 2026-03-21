@@ -45,7 +45,7 @@ export default function Hero() {
 
     return (
         <section className="w-full">
-            <div className="relative h-[90vh] md:h-[95vh] w-full overflow-hidden flex items-center justify-center">
+            <div className="relative h-[80vh] md:h-[95vh] w-full overflow-hidden flex items-center justify-center">
 
                 {/* 1. THE BACKGROUND IMAGE with Parallax Zoom */}
                 <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
@@ -66,7 +66,7 @@ export default function Hero() {
                 </motion.div>
 
                 {/* 2. THE CONTENT */}
-                <div className="relative z-10 text-center text-white max-w-6xl px-6 flex flex-col items-center w-full">
+                <div className="relative z-10 text-center text-white max-w-6xl px-6 flex flex-col items-center w-full pt-16 md:pt-0">
 
                     <motion.div
                         variants={container}
