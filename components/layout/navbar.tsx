@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { name: "Home", href: "/" },
   { name: "Packages", href: "/services" },
   { name: "Flights", href: "/ticketing" },
+  { name: "Vehicle", href: "/services?type=vehicle" },
   { name: "Visa  ", href: "/visa" },
   { name: "About Us", href: "/about" },
   { name: "Contact", href: "/contact" },

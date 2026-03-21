@@ -1,294 +1,244 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { format } from "date-fns";
 import {
-    MapPin, PlaneTakeoff, Calendar as CalendarIcon,
-    Users, Search, Loader2, Minus, Plus, Check, Car, Plane
+  MapPin, PlaneTakeoff, Calendar as CalendarIcon,
+  Users, Check, ChevronsUpDown, MessageSquare, Plus, Minus, Clock
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { AIRPORTS } from "@/lib/data";
 
 export default function HeroSearch() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
+  const [tab, setTab] = useState("flights");
 
-    // --- STATE ---
-    const [isLoading, setIsLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState("flights");
+  // States for all inputs
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
-    // Flight States
-    const [origin, setOrigin] = useState(searchParams.get("origin") || "");
-    const [destination, setDestination] = useState(searchParams.get("destination") || "");
-    const [date, setDate] = useState<Date | undefined>(
-        searchParams.get("date") ? new Date(searchParams.get("date")!) : undefined
-    );
-    const [travelers, setTravelers] = useState({
-        count: parseInt(searchParams.get("travelers") || "1"),
-        class: searchParams.get("class") || "Economy"
-    });
+  // Travelers State
+  const [travelers, setTravelers] = useState(1);
+  const [cabinClass, setCabinClass] = useState("Economy");
 
-    // Vehicle States
-    const [rentalLocation, setRentalLocation] = useState("");
-    const [rentalDate, setRentalDate] = useState<Date | undefined>(undefined);
+  // Duration State (for Vehicles)
+  const [duration, setDuration] = useState(1);
 
-    // --- SEARCH HANDLER ---
-    const handleSearch = () => {
-        if (activeTab === "flights") {
-            if (!origin || !destination) {
-                alert("Please select both Origin and Destination");
-                return;
-            }
-            setIsLoading(true);
+  const handleWhatsAppInquiry = () => {
+    const phoneNumber = "9779841743706";
+    const originLabel = AIRPORTS.find(a => a.id === origin)?.city || origin || "TBD";
+    const destLabel = AIRPORTS.find(a => a.id === destination)?.city || destination || "TBD";
+    const dateString = date ? format(date, "PPP") : "Flexible";
 
-            const params = new URLSearchParams();
-            params.set("origin", origin);
-            params.set("destination", destination);
-            if (date) params.set("date", date.toISOString().split('T')[0]);
-            params.set("travelers", travelers.count.toString());
-            params.set("class", travelers.class);
+    let message = "";
+    if (tab === "flights") {
+      message = `Hello JetSet! I'd like a quote for a *Flight*. 0A✈️ *From:* ${originLabel}%0A📍 *To:* ${destLabel}%0A📅 *Date:* ${dateString}%0A👥 *Travelers:* ${travelers}%0A💺 *Class:* ${cabinClass}`;
+    } else {
+      message = `Hello JetSet! I'm interested in a *Vehicle Rental*.0A🚗 *Type:* Luxury SUV/Van%0A📍 *Pickup:* ${originLabel}%0A📅 *Start Date:* ${dateString}%0A⏱️ *Duration:* ${duration} Days`;
+    }
 
-            setTimeout(() => {
-                router.push(`/ticketing?${params.toString()}`);
-            }, 800);
-        } else {
-            // Vehicle search logic
-            if (!rentalLocation) {
-                alert("Please select a pick-up location");
-                return;
-            }
-            setIsLoading(true);
-            const params = new URLSearchParams();
-            params.set("location", rentalLocation);
-            if (rentalDate) params.set("date", rentalDate.toISOString());
-            params.set("type", "vehicle");
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+  };
 
-            setTimeout(() => {
-                router.push(`/ticketing?${params.toString()}`);
-            }, 800);
-        }
-    };
+  return (
+    <div className="w-full flex flex-col items-center gap-6">
+      {/* TABS */}
+      <div className="bg-black/20 backdrop-blur-md p-1 rounded-full border border-white/10 flex gap-1">
+        <button
+          onClick={() => setTab("flights")}
+          className={cn("px-6 py-2 rounded-full text-xs font-bold transition-all", tab === "flights" ? "bg-[#079d9a] text-white shadow-lg" : "text-white/60 hover:text-white")}
+        >
+          Flights
+        </button>
+        <button
+          onClick={() => setTab("vehicles")}
+          className={cn("px-6 py-2 rounded-full text-xs font-bold transition-all", tab === "vehicles" ? "bg-[#079d9a] text-white shadow-lg" : "text-white/60 hover:text-white")}
+        >
+          Vehicles
+        </button>
+      </div>
 
-    return (
-        <div className="w-full max-w-6xl mx-auto space-y-6">
-            <div className="flex justify-center">
-                <Tabs defaultValue="flights" className="w-auto" onValueChange={setActiveTab}>
-                    <TabsList className="bg-white/20 backdrop-blur-md border border-white/30 p-1 rounded-full shadow-lg">
-                        <TabsTrigger
-                            value="flights"
-                            className="rounded-full px-8 py-2.5 data-[state=active]:bg-[#079d9a] data-[state=active]:text-white transition-all duration-300 gap-2 font-bold"
-                        >
-                            <Plane className="h-4 w-4" /> Flights
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="vehicles"
-                            className="rounded-full px-8 py-2.5 data-[state=active]:bg-[#079d9a] data-[state=active]:text-white transition-all duration-300 gap-2 font-bold"
-                        >
-                            <Car className="h-4 w-4" /> Vehicle Rental
-                        </TabsTrigger>
-                    </TabsList>
-                </Tabs>
-            </div>
+      {/* SEARCH BAR */}
+      <div className="bg-white rounded-2xl md:rounded-full shadow-2xl p-2 flex flex-col md:flex-row items-center w-full max-w-6xl border border-white/20">
 
-            <div className="flex flex-col md:flex-row bg-white rounded-2xl md:rounded-full shadow-2xl p-2 border border-slate-100 w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
-                {activeTab === "flights" ? (
-                    <>
-                        {/* FLIGHT SEARCH FIELDS */}
-                        <LocationPicker
-                            label="Origin"
-                            value={origin}
-                            setValue={setOrigin}
-                            icon={<MapPin className="h-5 w-5 text-slate-300" />}
-                            placeholder="Where from?"
-                        />
+        {/* Origin */}
+        <LocationSelector label="Origin" value={origin} setValue={setOrigin} icon={<MapPin className="h-4 w-4 text-slate-300" />} placeholder="Where from?" />
 
-                        <LocationPicker
-                            label="Destination"
-                            value={destination}
-                            setValue={setDestination}
-                            icon={<PlaneTakeoff className="h-5 w-5 text-slate-300" />}
-                            placeholder="Where to?"
-                        />
+        {/* Destination */}
+        <LocationSelector label="Destination" value={destination} setValue={setDestination} icon={<PlaneTakeoff className="h-4 w-4 text-slate-300" />} placeholder="Where to?" />
 
-                        <div className="flex-1 px-6 py-2 border-b md:border-b-0 md:border-r border-slate-100 flex items-center gap-3">
-                            <div className="flex flex-col items-start w-full">
-                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Departure</label>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <button className="flex items-center gap-2 w-full text-sm font-semibold text-slate-700 h-6">
-                                            <CalendarIcon className="h-4 w-4 text-[#079d9a]" />
-                                            {date ? format(date, "MMM dd, yyyy") : <span className="text-slate-300">Pick a date</span>}
-                                        </button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0 bg-white border-none shadow-2xl" align="center">
-                                        <Calendar
-                                            mode="single"
-                                            selected={date}
-                                            onSelect={setDate}
-                                            disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
-                                            className="bg-white text-slate-900 rounded-xl"
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
-                        </div>
-
-                        <div className="flex-1 px-6 py-2 flex items-center gap-3 md:border-r border-slate-100">
-                            <div className="flex flex-col items-start w-full">
-                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Travelers & Class</label>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <button className="flex items-center gap-2 w-full text-sm font-semibold text-slate-700 h-6">
-                                            <Users className="h-4 w-4 text-[#079d9a]" />
-                                            <span className="truncate">{travelers.count} Traveler, {travelers.class}</span>
-                                        </button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-64 p-5 bg-white border-none shadow-2xl rounded-2xl" align="center">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-sm font-bold text-slate-800">Travelers</span>
-                                                <div className="flex items-center gap-3">
-                                                    <button onClick={() => setTravelers({ ...travelers, count: Math.max(1, travelers.count - 1) })} className="h-8 w-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
-                                                        <Minus className="h-3 w-3" />
-                                                    </button>
-                                                    <span className="text-sm font-bold">{travelers.count}</span>
-                                                    <button onClick={() => setTravelers({ ...travelers, count: travelers.count + 1 })} className="h-8 w-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
-                                                        <Plus className="h-3 w-3" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className="pt-4 border-t border-slate-50">
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase mb-3">Class</p>
-                                                <div className="flex flex-col gap-1">
-                                                    {["Economy", "Business", "First"].map((c) => (
-                                                        <button
-                                                            key={c}
-                                                            onClick={() => setTravelers({ ...travelers, class: c })}
-                                                            className={cn("text-left px-3 py-2 rounded-lg text-xs font-semibold transition-all",
-                                                                travelers.class === c ? "bg-[#079d9a] text-white" : "hover:bg-slate-50 text-slate-500")}
-                                                        >
-                                                            {c}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        {/* VEHICLE SEARCH FIELDS */}
-                        <LocationPicker
-                            label="Pick-up Location"
-                            value={rentalLocation}
-                            setValue={setRentalLocation}
-                            icon={<MapPin className="h-5 w-5 text-slate-300" />}
-                            placeholder="Where to pick up?"
-                        />
-
-                        <div className="flex-1 px-6 py-2 border-b md:border-b-0 md:border-r border-slate-100 flex items-center gap-3">
-                            <div className="flex flex-col items-start w-full">
-                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pick-up Date</label>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <button className="flex items-center gap-2 w-full text-sm font-semibold text-slate-700 h-6">
-                                            <CalendarIcon className="h-4 w-4 text-[#079d9a]" />
-                                            {rentalDate ? format(rentalDate, "MMM dd, yyyy") : <span className="text-slate-300">Pick a date</span>}
-                                        </button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0 bg-white border-none shadow-2xl" align="center">
-                                        <Calendar
-                                            mode="single"
-                                            selected={rentalDate}
-                                            onSelect={setRentalDate}
-                                            disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
-                                            className="bg-white text-slate-900 rounded-xl"
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
-                        </div>
-
-                        <div className="flex-1 px-6 py-2 flex items-center gap-3 md:border-r border-slate-100">
-                            <div className="flex flex-col items-start w-full">
-                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Duration</label>
-                                <button className="flex items-center gap-2 w-full text-sm font-semibold text-slate-700 h-6">
-                                    <CalendarIcon className="h-4 w-4 text-[#079d9a]" />
-                                    <span>Same Day / Daily</span>
-                                </button>
-                            </div>
-                        </div>
-                    </>
-                )}
-
-                <Button
-                    onClick={handleSearch}
-                    disabled={isLoading}
-                    className="bg-[#079d9a] hover:bg-[#068a87] text-white px-8 h-14 rounded-xl md:rounded-full font-bold shadow-lg shadow-[#079d9a]/20 m-1"
-                >
-                    {isLoading ? <Loader2 className="animate-spin" /> : <>Find {activeTab === "flights" ? "trip" : "vehicle"} now <Search className="ml-2 h-4 w-4" /></>}
-                </Button>
-            </div>
+        {/* Date */}
+        <div className="flex-1 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100">
+          <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter block mb-1">Departure</label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center gap-2 text-sm font-bold text-slate-700 w-full text-left">
+                <CalendarIcon className="h-4 w-4 text-[#079d9a]" />
+                {date ? format(date, "MMM dd") : <span className="text-slate-300 font-medium">Pick a date</span>}
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 bg-white border-none shadow-2xl">
+              <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+            </PopoverContent>
+          </Popover>
         </div>
-    );
+
+        {/* Dynamic Selector (Travelers or Duration) */}
+        <div className="flex-1 px-6 py-3">
+          {tab === "flights" ? (
+            <TravelerSelector count={travelers} setCount={setTravelers} cabin={cabinClass} setCabin={setCabinClass} />
+          ) : (
+            <DurationSelector days={duration} setDays={setDuration} />
+          )}
+        </div>
+
+        {/* ACTION BUTTON */}
+        <Button
+          onClick={handleWhatsAppInquiry}
+          className="bg-[#079d9a] hover:bg-[#068a87] text-white px-8 h-14 rounded-xl md:rounded-full font-extrabold uppercase tracking-widest text-[10px] gap-2 shadow-lg shadow-[#079d9a]/20 shrink-0"
+        >
+          Check Rates <MessageSquare className="h-4 w-4 fill-white" />
+        </Button>
+      </div>
+    </div>
+  );
 }
 
-function LocationPicker({ label, value, setValue, icon, placeholder }: any) {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <div className="flex-1 px-6 py-2 border-b md:border-b-0 md:border-r border-slate-100 flex items-center gap-3">
-            <div className="flex flex-col items-start w-full">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{label}</label>
-                <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                        <button className="flex items-center gap-2 w-full text-sm font-semibold text-slate-700 h-6">
-                            {icon}
-                            <span className={cn("truncate", !value && "text-slate-300")}>
-                                {value ? AIRPORTS.find(a => a.id === value)?.city || value : placeholder}
-                            </span>
-                        </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[300px] p-0 bg-white border-none shadow-2xl rounded-xl overflow-hidden" align="start">
-                        <Command className="bg-white">
-                            <CommandInput placeholder={`Search ${label}...`} className="border-none focus:ring-0 text-slate-800 font-medium" />
-                            <CommandList>
-                                <CommandEmpty className="py-4 text-center text-xs text-slate-400">No location found.</CommandEmpty>
-                                <CommandGroup heading="Suggestions" className="text-slate-400 font-bold px-2">
-                                    {AIRPORTS.map((airport) => (
-                                        <CommandItem
-                                            key={airport.id}
-                                            value={airport.id}
-                                            onSelect={(currentValue) => {
-                                                setValue(currentValue === value ? "" : currentValue);
-                                                setOpen(false);
-                                            }}
-                                            className="flex items-center gap-3 py-3 px-3 cursor-pointer hover:bg-slate-50 rounded-lg text-slate-700 data-[selected=true]:bg-slate-50"
-                                        >
-                                            <MapPin className="h-4 w-4 text-slate-300" />
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-sm">{airport.city} ({airport.id})</span>
-                                                <span className="text-[10px] text-slate-400 font-medium">{airport.name}</span>
-                                            </div>
-                                            <Check className={cn("ml-auto h-4 w-4 text-[#079d9a]", value === airport.id ? "opacity-100" : "opacity-0")} />
-                                        </CommandItem>
-                                    ))}
-                                </CommandGroup>
-                            </CommandList>
-                        </Command>
-                    </PopoverContent>
-                </Popover>
+// --- ORIGIN/DESTINATION SELECTOR ---
+function LocationSelector({ label, value, setValue, icon, placeholder }: any) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex-1 px-6 py-3 border-b md:border-b-0 md:border-r border-slate-100">
+      <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter block mb-1">{label}</label>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button className="flex items-center justify-between gap-2 text-sm font-bold text-slate-700 w-full group">
+            <div className="flex items-center gap-2 truncate">
+              {icon}
+              <span className={cn("truncate", !value && "text-slate-300 font-medium")}>
+                {value ? (AIRPORTS.find(a => a.id === value)?.city || value) : placeholder}
+              </span>
             </div>
-        </div>
-    );
+            <ChevronsUpDown className="h-3 w-3 text-slate-300 group-hover:text-[#079d9a]" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[300px] p-0 bg-white border-none shadow-2xl rounded-2xl overflow-hidden" align="start">
+          <Command>
+            <CommandInput placeholder={`Search ${label}...`} className="h-12 border-none" />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup heading="Domestic (Nepal)">
+                {AIRPORTS.filter(a => a.country === "Nepal").map((airport) => (
+                  <CommandItem
+                    key={airport.id}
+                    onSelect={() => {
+                      setValue(airport.id);
+                      setOpen(false);
+                    }}
+                    className="flex items-center justify-between py-3 cursor-pointer"
+                  >
+                    <div>
+                      <p className="font-bold text-slate-800">{airport.city} ({airport.id})</p>
+                      <p className="text-[10px] text-slate-400">{airport.name}</p>
+                    </div>
+                    {value === airport.id && <Check className="h-4 w-4 text-[#079d9a]" />}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              <CommandGroup heading="International">
+                {AIRPORTS.filter(a => a.country !== "Nepal").map((airport) => (
+                  <CommandItem
+                    key={airport.id}
+                    onSelect={() => {
+                      setValue(airport.id);
+                      setOpen(false);
+                    }}
+                    className="flex items-center justify-between py-3 cursor-pointer"
+                  >
+                    <div>
+                      <p className="font-bold text-slate-800">{airport.city} ({airport.id})</p>
+                      <p className="text-[10px] text-slate-400">{airport.name}</p>
+                    </div>
+                    {value === airport.id && <Check className="h-4 w-4 text-[#079d9a]" />}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+// --- TRAVELER & CLASS SELECTOR ---
+function TravelerSelector({ count, setCount, cabin, setCabin }: any) {
+  return (
+    <div className="w-full">
+      <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter block mb-1">Travelers & Class</label>
+      <Popover>
+        <PopoverTrigger asChild>
+          <button className="flex items-center gap-2 text-sm font-bold text-slate-700 w-full">
+            <Users className="h-4 w-4 text-[#079d9a]" />
+            <span className="truncate">{count} Traveler, {cabin}</span>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-64 p-5 bg-white border-none shadow-2xl rounded-2xl space-y-6">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-800">Count</span>
+            <div className="flex items-center gap-3">
+              <button onClick={() => setCount(Math.max(1, count - 1))} className="p-1 rounded-full border border-slate-200 hover:bg-slate-50"><Minus className="h-3 w-3" /></button>
+              <span className="text-sm font-bold">{count}</span>
+              <button onClick={() => setCount(count + 1)} className="p-1 rounded-full border border-slate-200 hover:bg-slate-50"><Plus className="h-3 w-3" /></button>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Cabin Class</span>
+            <div className="flex flex-col gap-1">
+              {["Economy", "Business", "First"].map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCabin(c)}
+                  className={cn("text-left px-3 py-2 rounded-lg text-xs font-bold transition-all", cabin === c ? "bg-[#079d9a] text-white" : "hover:bg-slate-50 text-slate-600")}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+// --- DURATION SELECTOR (FOR VEHICLES) ---
+function DurationSelector({ days, setDays }: any) {
+  return (
+    <div className="w-full">
+      <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter block mb-1">Rental Duration</label>
+      <Popover>
+        <PopoverTrigger asChild>
+          <button className="flex items-center gap-2 text-sm font-bold text-slate-700 w-full">
+            <Clock className="h-4 w-4 text-[#079d9a]" />
+            <span>{days} Day{days > 1 ? 's' : ''}</span>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-56 p-5 bg-white border-none shadow-2xl rounded-2xl">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-800">Days</span>
+            <div className="flex items-center gap-3">
+              <button onClick={() => setDays(Math.max(1, days - 1))} className="p-1 rounded-full border border-slate-200 hover:bg-slate-50"><Minus className="h-3 w-3" /></button>
+              <span className="text-sm font-bold">{days}</span>
+              <button onClick={() => setDays(days + 1)} className="p-1 rounded-full border border-slate-200 hover:bg-slate-50"><Plus className="h-3 w-3" /></button>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
 }

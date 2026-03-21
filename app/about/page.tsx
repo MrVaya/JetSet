@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ShieldCheck, Globe, Award, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { RevealOnScroll as Reveal } from "@/components/shared/RevealOnScroll";
 
 const VALUES = [
@@ -26,6 +27,21 @@ const VALUES = [
 export default function AboutPage() {
     return (
         <main className="min-h-screen bg-[#FDFDFD] pt-32 pb-20 overflow-hidden">
+            <style>{`
+                .about-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-color: #f1f5f9; }
+                .about-card:hover { 
+                    transform: translateY(-12px); 
+                    border-color: #079d9a !important; 
+                    box-shadow: 0 25px 50px -12px rgba(7, 157, 154, 0.15); 
+                }
+                .btn-glow { transition: all 0.3s ease; }
+                .btn-glow:hover { 
+                    transform: translateY(-2px); 
+                    box-shadow: 0 10px 25px -5px rgba(7, 157, 154, 0.4); 
+                }
+                @keyframes pulse-dot { 0%,100% {opacity:1; transform:scale(1);} 50% {opacity:0.6; transform:scale(0.85);} }
+                .pulse-dot { animation: pulse-dot 2s infinite ease-in-out; }
+            `}</style>
             {/* SECTION 1: HERO STORY */}
             <section className="px-6 max-w-7xl mx-auto mb-32">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -44,7 +60,7 @@ export default function AboutPage() {
                         </p>
                         <div className="flex gap-4">
                             <Link href="/services">
-                                <Button className="bg-[#079d9a] hover:bg-[#068a87] text-white px-8 h-14 rounded-2xl font-bold uppercase tracking-widest text-[11px]">
+                                <Button className="bg-[#079d9a] hover:bg-[#068a87] text-white px-8 h-14 rounded-2xl font-bold uppercase tracking-widest text-[11px] btn-glow">
                                     Explore Packages
                                 </Button>
                             </Link>
@@ -88,13 +104,26 @@ export default function AboutPage() {
                     {VALUES.map((val, i) => (
                         <Reveal
                             key={i}
-                            className="p-10 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500"
+                            className="p-10 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm about-card"
+                            delay={i * 0.1}
                         >
-                            <div className="h-14 w-14 rounded-2xl bg-[#079d9a]/10 flex items-center justify-center mb-6">
-                                <val.icon className="text-[#079d9a] w-6 h-6" />
+                            <div className="flex justify-between items-start mb-6">
+                                <div className="h-14 w-14 rounded-2xl bg-[#079d9a]/10 flex items-center justify-center">
+                                    <val.icon className="text-[#079d9a] w-6 h-6" />
+                                </div>
+                                {i === 0 && (
+                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#079d9a]/5 border border-[#079d9a]/10">
+                                        <div className="h-2 w-2 rounded-full bg-[#079d9a] pulse-dot" />
+                                        <span className="text-[9px] font-bold text-[#079d9a] tracking-widest uppercase">Verified</span>
+                                    </div>
+                                )}
                             </div>
                             <h4 className="text-xl font-bold text-slate-900 mb-4">{val.title}</h4>
-                            <p className="text-slate-500 text-sm leading-relaxed">{val.desc}</p>
+                            <p className="text-slate-500 text-sm leading-relaxed font-light">{val.desc}</p>
+                            <div className="mt-8 flex items-center gap-2 text-[#079d9a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span>Learn More</span>
+                                <div className="h-px w-12 bg-[#079d9a]/30" />
+                            </div>
                         </Reveal>
                     ))}
                 </div>

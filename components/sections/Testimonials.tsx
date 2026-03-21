@@ -49,7 +49,7 @@ export default function Testimonials() {
                 {/* BACKGROUND IMAGE - Spans 100% of viewport */}
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80"
+                        src="/testimonial.jpg"
                         alt="Beach Background"
                         fill
                         className="object-cover"

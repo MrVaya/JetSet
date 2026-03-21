@@ -43,10 +43,11 @@ export interface Vehicle {
 
 export const SITE_CONFIG = {
     name: "JetSet Holidays",
-    phone: "+977 9841743706",
+    phone: "+977 9841743706" ,  
+    secondaryPhones: ["+977 9810114227", "01-14546366"],
     waPhone: "9779841743706",
     email: "jetsetholidays36@gmail.com",
-    address: "Kathmandu, Nepal",
+    address: "Milan chowk B, Baneshwor",
     social: {
         facebook: "https://www.facebook.com/Jetsetholiday/",
         instagram: "https://www.instagram.com/jetsetholidays36",
@@ -497,6 +498,13 @@ export const AIRPORTS = [
     { id: "NBO", city: "Nairobi", name: "Jomo Kenyatta Intl", country: "Kenya" },
     { id: "MLE", city: "Male", name: "Velana International", country: "Maldives" },
     { id: "KUL", city: "Kuala Lumpur", name: "Kuala Lumpur Intl", country: "Malaysia" },
+    { id: "CDG", city: "Paris", name: "Charles de Gaulle", country: "France" },
+    { id: "JFK", city: "New York", name: "John F. Kennedy Intl", country: "USA" },
+    { id: "HND", city: "Tokyo", name: "Haneda Airport", country: "Japan" },
+    { id: "SYD", city: "Sydney", name: "Kingsford Smith", country: "Australia" },
+    { id: "FRA", city: "Frankfurt", name: "Frankfurt Airport", country: "Germany" },
+    { id: "AMS", city: "Amsterdam", name: "Schiphol Airport", country: "Netherlands" },
+    { id: "HKG", city: "Hong Kong", name: "Hong Kong Intl", country: "China" },
 ];
 
 export const VEHICLES = [

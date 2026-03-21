@@ -1,230 +1,628 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Plane, MapPin, Clock, ShieldCheck, ArrowRight, MessageSquare, Briefcase } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SITE_CONFIG, AIRPORTS } from "@/lib/data";
+import React, { useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  Plane,
+  ArrowRight,
+  MapPin,
+  Shield,
+  Clock,
+  PhoneCall,
+  Globe,
+  Mountain,
+  CheckCircle2,
+  ChevronRight,
+  Star,
+  Users,
+  Headphones,
+  Ticket,
+  Send,
+} from "lucide-react";
 
-export default function TicketingPage() {
-    return (
-        <Suspense fallback={<LoadingState />}>
-            <TicketingContent />
-        </Suspense>
-    );
+/* ─────────────────────────────────────────
+   BRAND TOKENS  (match screenshot exactly)
+───────────────────────────────────────── */
+const T = {
+  teal: "#079d9a",
+  tealLight: "#e6f7f7",
+  tealMid: "#c2eaea",
+  navy: "#0d1b2a",
+  navyMid: "#1e3448",
+  bg: "#eef4f4",
+  white: "#ffffff",
+  muted: "#6b8899",
+  border: "#d4e6e6",
+};
+
+/* ─────────────────────────────────────────
+   DATA
+───────────────────────────────────────── */
+const NAT_DESTINATIONS = [
+  { code: "PKR", city: "Pokhara", tag: "Mountain Gateway" },
+  { code: "BWA", city: "Bhairahawa", tag: "Lumbini Access" },
+  { code: "BHR", city: "Biratnagar", tag: "Eastern Hub" },
+  { code: "JMO", city: "Jomsom", tag: "Mustang Trek" },
+  { code: "LUA", city: "Lukla", tag: "Everest Base" },
+  { code: "SIF", city: "Simara", tag: "Business Route" },
+];
+
+const INTL_DESTINATIONS = [
+  { code: "DEL", city: "New Delhi", country: "India" },
+  { code: "DXB", city: "Dubai", country: "UAE" },
+  { code: "DOH", city: "Doha", country: "Qatar" },
+  { code: "BKK", city: "Bangkok", country: "Thailand" },
+  { code: "KUL", city: "Kuala Lumpur", country: "Malaysia" },
+  { code: "SIN", city: "Singapore", country: "Singapore" },
+];
+
+const STATS = [
+  { value: "10+", label: "Airlines Connected" },
+  { value: "20+", label: "Destinations" },
+  { value: "24/7", label: "Support Available" },
+  { value: "100+", label: "Happy Travelers" },
+];
+
+const STEPS = [
+  {
+    n: "01",
+    icon: PhoneCall,
+    title: "Tell Us Your Plan",
+    desc: "Share your travel dates, destination, and passenger count via WhatsApp or our form.",
+  },
+  {
+    n: "02",
+    icon: Ticket,
+    title: "We Find Best Options",
+    desc: "Our team searches national and international carriers to get you the best fares and timings.",
+  },
+  {
+    n: "03",
+    icon: Send,
+    title: "Confirm & Fly",
+    desc: "Approve your itinerary, complete payment securely, and receive e-tickets instantly.",
+  },
+];
+
+const AIRLINES = ["Buddha Air", "Yeti Airlines", "Shree Airlines", "Tara Air", "Qatar Airways", "Emirates", "IndiGo", "Air Arabia", "Nepal Airlines"];
+
+/* ─────────────────────────────────────────
+   HELPERS
+───────────────────────────────────────── */
+function Badge({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+        padding: "5px 14px",
+        borderRadius: "100px",
+        fontSize: "10px",
+        fontWeight: 700,
+        letterSpacing: "0.2em",
+        textTransform: "uppercase",
+        background: T.tealLight,
+        color: T.teal,
+        border: `1px solid ${T.tealMid}`,
+      }}
+    >
+      {children}
+    </span>
+  );
 }
 
-function TicketingContent() {
-    const searchParams = useSearchParams();
-    const [flights, setFlights] = useState([]);
-    const [loading, setLoading] = useState(true);
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      style={{
+        fontSize: "10px",
+        fontWeight: 800,
+        letterSpacing: "0.3em",
+        textTransform: "uppercase",
+        marginBottom: "16px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        color: T.teal,
+        justifyContent: "center",
+      }}
+    >
+      <span style={{ display: "inline-block", width: "20px", height: "2px", background: T.teal }} />
+      {children}
+      <span style={{ display: "inline-block", width: "20px", height: "2px", background: T.teal }} />
+    </p>
+  );
+}
 
-    const origin = searchParams.get("origin");
-    const destination = searchParams.get("destination");
+function doWhatsApp(service: string) {
+  const phone = "9779841743706";
+  const text = `Hi! I'm interested in your *${service}* flight booking service. Please help me.`;
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
+}
 
-    useEffect(() => {
-        async function getFlights() {
-            setLoading(true);
-            try {
-                const url = (origin && destination)
-                    ? `/api/ticketing?origin=${origin}&destination=${destination}`
-                    : `/api/ticketing`;
+/* ─────────────────────────────────────────
+   MAIN COMPONENT
+───────────────────────────────────────── */
+export default function FlightPage() {
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef });
+  const planeX = useTransform(scrollYProgress, [0, 1], ["-5%", "110%"]);
+  const [activeTab, setActiveTab] = useState<"national" | "international">("national");
 
-                const res = await fetch(url);
-                const data = await res.json();
-                setFlights(data);
-            } catch (err) {
-                console.error("Fetch error:", err);
-            } finally {
-                setLoading(false);
-            }
+  return (
+    <main style={{ background: T.bg, fontFamily: "'Plus Jakarta Sans', sans-serif", color: T.navy, overflowX: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        * { box-sizing: border-box; }
+        .teal-btn {
+          background: ${T.teal};
+          color: #fff;
+          border: none;
+          border-radius: 100px;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-weight: 700;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: all 0.22s;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 28px;
         }
-        getFlights();
-    }, [origin, destination]);
+        .teal-btn:hover { background: ${T.navyMid}; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(7,157,154,0.25); }
+        .ghost-btn {
+          background: transparent;
+          color: ${T.teal};
+          border: 1.5px solid ${T.teal};
+          border-radius: 100px;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-weight: 700;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: all 0.22s;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 28px;
+        }
+        .ghost-btn:hover { background: ${T.tealLight}; transform: translateY(-2px); }
+        .dest-card { transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+        .dest-card:hover { border-color: ${T.teal} !important; box-shadow: 0 8px 28px rgba(7,157,154,0.13); transform: translateY(-3px); }
+        .dest-card:hover .dest-arrow { opacity: 1 !important; transform: translateX(0) !important; }
+        .dest-arrow { opacity: 0; transform: translateX(-6px); transition: all 0.2s; }
+        .airline-pill {
+          white-space: nowrap;
+          background: white;
+          border: 1px solid ${T.border};
+          border-radius: 100px;
+          padding: 8px 20px;
+          font-size: 12px;
+          font-weight: 600;
+          color: ${T.navyMid};
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          flex-shrink: 0;
+        }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-inner { display: flex; gap: 14px; animation: marquee 20s linear infinite; width: max-content; }
+        .stat-card { background: ${T.white}; }
+        .nav-link { color: ${T.muted}; text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.18s; }
+        .nav-link:hover { color: ${T.teal}; }
+        .tab-btn { padding: 10px 28px; border-radius: 100px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border: none; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s; }
+        
+        /* --- Mobile Logic --- */
+        @media (max-width: 768px) {
+          .hero-container { flex-direction: column !important; padding: 120px 24px 60px !important; text-align: center; gap: 40px !important; }
+          .hero-left { width: 100%; }
+          .hero-right { display: none !important; }
+          .hero-badge { justify-content: center; margin: 0 auto; }
+          .hero-h1 { font-size: 2.8rem !important; margin: 20px auto !important; }
+          .hero-p { margin: 16px auto !important; }
+          .hero-btns { justify-content: center; }
+          .hero-features { justify-content: center; }
+          
+          .stats-section { padding: 32px 16px !important; }
+          .stats-grid-inner { grid-template-columns: repeat(2, 1fr) !important; gap: 1px !important; width: 100% !important; }
+          .stat-card-inner { padding: 20px 8px !important; }
+          .stat-card-inner p { font-size: 24px !important; }
+          .stat-card-inner p + p { font-size: 10px !important; line-height: 1.2; }
+          
+          .dest-grid-inner { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+          .dest-card-inner { padding: 16px 12px !important; }
+          .dest-card-inner p:first-of-type { font-size: 18px !important; }
+          
+          .steps-grid-inner { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .step-connector { display: none !important; }
+          
+          .cta-panel-inner { flex-direction: column !important; padding: 40px 24px !important; gap: 32px !important; text-align: center; }
+          .cta-left { width: 100% !important; }
+          .cta-left h2 { font-size: 2rem !important; }
+          .cta-left p { margin: 0 auto !important; }
+          .cta-left-btns { justify-content: center; }
+          .cta-right { width: 100% !important; max-width: 100% !important; }
+          
+          /* Hide duplicate nav on mobile to avoid clutter */
+          .local-nav { display: none !important; }
+        }
+        @media (max-width: 480px) {
+           .dest-grid-inner { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
 
-    if (loading) return <LoadingState />;
-
-    return (
-        <main className="min-h-screen bg-[#F8FAFB] pt-24 md:pt-32 pb-24 px-4 md:px-6 relative overflow-hidden">
-            {/* Background Decorative Elements */}
-            <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#079d9a]/5 rounded-full blur-3xl -mr-32 md:-mr-64 -mt-16 md:-mt-32 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#2a6a62]/5 rounded-full blur-3xl -ml-32 md:-ml-64 -mb-16 md:-mb-32 pointer-events-none" />
-
-            <div className="max-w-6xl mx-auto relative z-10">
-
-                {/* Hero Header */}
-                <header className="mb-10 md:mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="flex flex-col md:flex-row justify-between items-center md:items-end gap-8 bg-white/40 backdrop-blur-xl border border-white/60 p-8 md:p-14 rounded-[2.5rem] md:rounded-[3rem] shadow-sm text-center md:text-left"
-                    >
-                        <div className="max-w-2xl">
-                            <span className="inline-flex items-center gap-2 text-[#079d9a] font-bold uppercase tracking-[0.3em] text-[10px] mb-4 py-1.5 px-4 bg-[#079d9a]/5 rounded-full">
-                                <ShieldCheck className="w-3.5 h-3.5" /> Secure Flight Booking
-                            </span>
-                            <h1 className="text-3xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
-                                {origin && destination ? (
-                                    <>Discover Flights to <br /> <span className="text-[#079d9a]">{AIRPORTS.find(a => a.id === destination.toUpperCase())?.city || destination}</span></>
-                                ) : (
-                                    <>Explore Nepal's <br /> <span className="text-[#079d9a]">Luxury Routes</span></>
-                                )}
-                            </h1>
-                            <p className="text-slate-500 mt-4 md:mt-6 text-base md:text-lg max-w-lg font-medium mx-auto md:mx-0">
-                                Hand-picked connections for the most discerning travelers. Experience seamless journeys across the Himalayas.
-                            </p>
-                        </div>
-                        <div className="hidden lg:block text-right">
-                            <div className="bg-slate-900 text-white px-8 py-6 rounded-3xl shadow-2xl relative overflow-hidden group border border-white/10">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#079d9a]/20 blur-2xl rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700" />
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 relative z-10">Total Routes Found</p>
-                                <p className="text-6xl font-black relative z-10">{flights.length}</p>
-                            </div>
-                        </div>
-                    </motion.div>
-                </header>
-
-                {/* Search Result Legend */}
-                {origin && destination && (
-                    <div className="flex items-center gap-4 mb-8 px-4 opacity-60">
-                        <div className="h-px flex-1 bg-slate-200" />
-                        <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">Showing best options for your route</span>
-                        <div className="h-px flex-1 bg-slate-200" />
-                    </div>
-                )}
-
-                {/* Flights List */}
-                <div className="grid grid-cols-1 gap-6 md:gap-8">
-                    <AnimatePresence>
-                        {flights.map((f: any, idx) => (
-                            <motion.div
-                                key={f.id}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                className="group bg-white border border-slate-100 rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:border-[#079d9a]/20 transition-all duration-500 relative overflow-hidden"
-                            >
-                                {/* Decorative Gradient on Hover */}
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#079d9a] opacity-0 group-hover:opacity-100 transition-opacity hidden md:block" />
-
-                                {/* Airline Info */}
-                                <div className="flex items-center gap-5 md:gap-6 min-w-0 md:min-w-[260px] w-full lg:w-auto">
-                                    <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-[#F8FAFB] p-2.5 md:p-3 border border-slate-50 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-500 overflow-hidden relative flex-shrink-0">
-                                        <img src={f.logo} alt={f.airline} className="w-full h-full object-contain relative z-10" />
-                                        <div className="absolute inset-0 bg-white/20 group-hover:bg-transparent transition-colors" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <h3 className="font-black text-slate-900 text-xl md:text-2xl uppercase tracking-tight leading-none mb-2 truncate">{f.airline}</h3>
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <span className="text-[9px] md:text-[10px] font-bold text-[#079d9a] uppercase tracking-widest px-2 py-0.5 bg-[#079d9a]/5 rounded-md border border-[#079d9a]/10">
-                                                {f.aircraft}
-                                            </span>
-                                            <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
-                                                <Briefcase className="w-3 h-3" /> Inc. 20kg
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Journey Visualization */}
-                                <div className="flex-1 flex items-center justify-between w-full max-w-xl px-2 md:px-8 bg-slate-50/50 md:bg-transparent p-4 md:p-0 rounded-2xl md:rounded-none">
-                                    <div className="text-center md:text-left">
-                                        <p className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter mb-1 leading-none">{f.departureTime}</p>
-                                        <div className="flex flex-col items-center md:items-start leading-none">
-                                            <p className="text-xs md:text-sm font-black text-[#079d9a] uppercase tracking-widest">
-                                                {AIRPORTS.find(a => a.id === f.fromCode)?.city || f.fromCode}
-                                            </p>
-                                            <p className="text-[8px] md:text-[9px] font-bold text-slate-300 uppercase tracking-tighter mt-1">Departs</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex-1 px-4 md:px-10 flex flex-col items-center relative min-w-[100px] md:min-w-[140px]">
-                                        <div className="mb-2 px-3 py-1 bg-white md:bg-[#F8FAFB] border border-slate-100 rounded-full flex items-center gap-1 shadow-sm whitespace-nowrap">
-                                            <Clock className="w-3 h-3 text-[#079d9a]" />
-                                            <span className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-tight">{f.duration}</span>
-                                        </div>
-
-                                        <div className="w-full h-[2px] bg-slate-100 relative overflow-hidden rounded-full">
-                                            <motion.div
-                                                initial={{ width: "0%" }}
-                                                whileInView={{ width: "100%" }}
-                                                transition={{ duration: 1.5, ease: "easeInOut" }}
-                                                className="absolute inset-0 bg-gradient-to-r from-transparent via-[#079d9a]/30 to-transparent"
-                                            />
-                                            <div className="absolute top-1/2 left-0 w-1.5 h-1.5 rounded-full bg-[#079d9a] -translate-y-1/2" />
-                                            <div className="absolute top-1/2 right-0 w-1.5 h-1.5 rounded-full bg-[#079d9a] -translate-y-1/2" />
-                                        </div>
-
-                                        <div className="mt-2 flex items-center gap-1.5">
-                                            <Plane className="w-3.5 h-3.5 text-[#079d9a] rotate-90" />
-                                            <span className="text-[8px] md:text-[9px] font-black text-[#079d9a] uppercase tracking-widest whitespace-nowrap">{f.stops}</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="text-center md:text-right">
-                                        <p className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter mb-1 leading-none">{f.arrivalTime}</p>
-                                        <div className="flex flex-col items-center md:items-end leading-none">
-                                            <p className="text-xs md:text-sm font-black text-[#079d9a] uppercase tracking-widest">
-                                                {AIRPORTS.find(a => a.id === f.toCode)?.city || f.toCode}
-                                            </p>
-                                            <p className="text-[8px] md:text-[9px] font-bold text-slate-300 uppercase tracking-tighter mt-1">Arrives</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Call to Action */}
-                                <div className="flex flex-row lg:flex-col items-center lg:items-end justify-center w-full lg:w-auto lg:pl-10 lg:border-l border-slate-50 pt-6 lg:pt-0 border-t lg:border-t-0 mt-2 lg:mt-0">
-                                    <a
-                                        href={`https://api.whatsapp.com/send?phone=${SITE_CONFIG.waPhone}&text=${encodeURIComponent(`*Elite Flight Booking*\n*Airline:* ${f.airline}\n*Flight:* ${f.aircraft}\n*Route:* ${AIRPORTS.find(a => a.id === f.fromCode)?.city || f.fromCode} → ${AIRPORTS.find(a => a.id === f.toCode)?.city || f.toCode}\n*Time:* ${f.departureTime} - ${f.arrivalTime}\n\nI'd like to reserve a seat and verify current pricing.`)}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-block"
-                                    >
-                                        <Button className="bg-[#079d9a] hover:bg-slate-900 text-white px-6 md:px-12 h-14 md:h-16 rounded-2xl md:rounded-[1.5rem] font-bold uppercase text-[10px] md:text-[11px] tracking-widest transition-all shadow-xl shadow-[#079d9a]/10 hover:shadow-[#079d9a]/20 group/btn whitespace-nowrap">
-                                            Reserve Seat <ArrowRight className="ml-2 w-3.5 h-3.5 md:w-4 md:h-4 group-hover/btn:translate-x-1 transition-transform" />
-                                        </Button>
-                                    </a>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
-                </div>
-
-                {/* Footer Help */}
-                <footer className="mt-16 md:mt-24 bg-white/40 backdrop-blur-xl rounded-[2.5rem] border border-white/60 p-8 md:p-12 text-center">
-                    <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4">Need a Custom Travel Solution?</h3>
-                    <p className="text-slate-500 mb-8 md:mb-10 max-w-lg mx-auto text-sm md:text-base">Our specialists can arrange private charters, corporate group bookings, and premium lounge access globally.</p>
-                    <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
-                        <Button variant="outline" className="rounded-2xl border-slate-200 hover:border-[#079d9a] text-slate-600 h-12 md:h-14 px-6 md:px-8 font-bold uppercase text-[9px] md:text-[10px] tracking-widest">
-                            Charter Inquiry
-                        </Button>
-                        <Button variant="outline" className="rounded-2xl border-slate-200 hover:border-[#079d9a] text-slate-600 h-12 md:h-14 px-6 md:px-8 font-bold uppercase text-[9px] md:text-[10px] tracking-widest">
-                            Group Bookings
-                        </Button>
-                        <a href="/contact" className="w-full sm:w-auto">
-                            <Button className="bg-slate-900 text-white rounded-2xl h-12 md:h-14 px-8 md:px-10 font-bold uppercase text-[9px] md:text-[10px] tracking-widest flex items-center justify-center gap-2 w-full">
-                                <MessageSquare className="w-4 h-4" /> Expert Assistance
-                            </Button>
-                        </a>
-                    </div>
-                </footer>
-
+      <nav className="local-nav" style={{ background: T.white, borderBottom: `1px solid ${T.border}`, position: "sticky", top: 0, zIndex: 50 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: T.navy, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Plane style={{ width: "16px", height: "16px", color: T.teal, transform: "rotate(45deg)" }} />
             </div>
-        </main>
-    );
-}
-
-function LoadingState() {
-    return (
-        <div className="h-screen flex flex-col items-center justify-center bg-[#F8FAFB] relative">
-            <div className="relative">
-                <div className="absolute inset-0 bg-[#079d9a] blur-3xl opacity-10 animate-pulse" />
-                <Loader2 className="w-16 h-16 text-[#079d9a] animate-spin mb-6 relative z-10" />
-                <Plane className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-[#079d9a] relative z-20" />
-            </div>
-            <p className="text-slate-400 font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Scanning Premium Skies...</p>
+            <span style={{ fontWeight: 900, fontSize: "20px", letterSpacing: "-0.03em", color: T.navy }}>
+              Jet<span style={{ color: T.teal }}>Set</span>
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: "32px" }}>
+            {["Home", "Packages", "Flights", "Visa", "About Us", "Contact"].map((item) => (
+              <a key={item} href="#" className="nav-link" style={item === "Flights" ? { color: T.teal } : {}}>
+                {item}
+              </a>
+            ))}
+          </div>
+          <button className="teal-btn" style={{ padding: "11px 22px" }} onClick={() => doWhatsApp("General Enquiry")}>
+            <PhoneCall style={{ width: "14px", height: "14px" }} /> Get a Quote
+          </button>
         </div>
-    );
+      </nav>
+
+      {/* ═══════════════════════════════════
+          HERO
+      ═══════════════════════════════════ */}
+      <section
+        ref={heroRef}
+        style={{ background: `linear-gradient(135deg, ${T.navy} 0%, ${T.navyMid} 100%)`, minHeight: "91vh", position: "relative", overflow: "hidden", display: "flex", alignItems: "center" }}
+      >
+        {/* Dot grid */}
+        <div style={{ position: "absolute", inset: 0, opacity: 0.09, backgroundImage: `radial-gradient(circle, ${T.teal} 1.5px, transparent 1.5px)`, backgroundSize: "34px 34px" }} />
+
+        {/* SVG flight paths */}
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.12 }} viewBox="0 0 1400 700" fill="none" preserveAspectRatio="none">
+          <path d="M-100 500 Q350 100 700 350 Q1050 600 1500 200" stroke={T.teal} strokeWidth="1.5" strokeDasharray="8 6" fill="none" />
+          <path d="M-100 350 Q400 620 750 250 Q1100 -50 1500 420" stroke={T.teal} strokeWidth="1" strokeDasharray="4 10" fill="none" />
+          <circle cx="700" cy="350" r="160" stroke={T.teal} strokeWidth="0.8" strokeDasharray="4 6" fill="none" opacity="0.5" />
+        </svg>
+
+        {/* Animated plane */}
+        <motion.div style={{ x: planeX, position: "absolute", top: "44%", transform: "translateY(-50%)", zIndex: 10, pointerEvents: "none" }}>
+          <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: T.teal, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 0 0 8px rgba(7,157,154,0.15)` }}>
+            <Plane style={{ width: "20px", height: "20px", color: "white" }} />
+          </div>
+        </motion.div>
+
+        {/* Content */}
+        <div className="hero-container" style={{ maxWidth: "1280px", margin: "0 auto", padding: "100px 32px", display: "flex", gap: "64px", alignItems: "center", position: "relative", zIndex: 20, width: "100%" }}>
+          {/* Left */}
+          <motion.div className="hero-left" style={{ flex: 1 }} initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75 }}>
+            <div className="hero-badge" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Badge>
+                <Shield style={{ width: "12px", height: "12px" }} /> Secure Flight Booking
+              </Badge>
+            </div>
+
+            <h1 className="hero-h1" style={{ marginTop: "24px", fontWeight: 900, fontSize: "clamp(2.6rem, 5.5vw, 5rem)", lineHeight: 1.0, letterSpacing: "-0.03em", color: T.white }}>
+              Fly Anywhere<br />
+              <span style={{ color: T.teal }}>From Nepal.</span>
+            </h1>
+
+            <p className="hero-p" style={{ marginTop: "20px", fontSize: "16px", fontWeight: 300, lineHeight: 1.7, maxWidth: "420px", color: "#8fafc0" }}>
+              We handle your flight bookings — domestic mountain routes or international connections — so you can focus on the journey ahead.
+            </p>
+
+            <div className="hero-btns" style={{ marginTop: "36px", display: "flex", gap: "14px", flexWrap: "wrap" }}>
+              <button className="teal-btn" onClick={() => doWhatsApp("National Flight")}>
+                Book Domestic <ArrowRight style={{ width: "15px", height: "15px" }} />
+              </button>
+              <button className="ghost-btn" onClick={() => doWhatsApp("International Flight")}>
+                <Globe style={{ width: "14px", height: "14px" }} /> International Routes
+              </button>
+            </div>
+
+            <div className="hero-features" style={{ marginTop: "40px", display: "flex", gap: "24px", flexWrap: "wrap" }}>
+              {["No Hidden Fees", "Instant E-Ticket", "24/7 WhatsApp Support"].map((f) => (
+                <div key={f} style={{ display: "flex", alignItems: "center", gap: "7px", fontSize: "13px", fontWeight: 500, color: "#8fafc0" }}>
+                  <CheckCircle2 style={{ width: "15px", height: "15px", color: T.teal }} />
+                  {f}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right — glass card */}
+          <motion.div className="hero-right " style={{ flexShrink: 0, width: "340px" }} initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 0.7 }}>
+            <div style={{ borderRadius: "24px", padding: "32px", background: "rgba(255,255,255,0.055)", border: `1px solid rgba(7,157,154,0.22)`, backdropFilter: "blur(16px)" }}>
+              <p style={{ fontSize: "10px", fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase", color: T.teal, marginBottom: "24px" }}>
+                Why Book With Us
+              </p>
+              {[
+                { icon: Globe, title: "National & International", desc: "All Nepal domestic routes + worldwide connections" },
+                { icon: Headphones, title: "Personal Booking Agent", desc: "A real person handles your ticket end-to-end" },
+                { icon: Shield, title: "Price Match Guarantee", desc: "We match or beat any verified flight price" },
+                { icon: Clock, title: "Fast Confirmation", desc: "Tickets confirmed and sent within minutes" },
+              ].map(({ icon: Icon, title, desc }) => (
+                <div key={title} style={{ display: "flex", gap: "14px", marginBottom: "20px" }}>
+                  <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(7,157,154,0.14)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Icon style={{ width: "16px", height: "16px", color: T.teal }} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: "13px", fontWeight: 700, color: T.white }}>{title}</p>
+                    <p style={{ fontSize: "11px", fontWeight: 400, color: "#8fafc0", marginTop: "3px", lineHeight: 1.5 }}>{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Wave */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+          <svg viewBox="0 0 1440 56" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+            <path d="M0 56V28C240 0 480 56 720 28C960 0 1200 56 1440 28V56H0Z" fill={T.bg} />
+          </svg>
+        </div>
+      </section>
+      {/* ═══════════════════════════════════
+          AIRLINE MARQUEE
+      ═══════════════════════════════════ */}
+      <section style={{ padding: "48px 0", background: T.white, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, overflow: "hidden" }}>
+        <p style={{ textAlign: "center", fontSize: "10px", fontWeight: 800, letterSpacing: "0.3em", textTransform: "uppercase", color: T.muted, marginBottom: "24px" }}>
+          Airlines We Book
+        </p>
+        <div style={{ overflow: "hidden" }}>
+          <div className="marquee-inner">
+            {[...AIRLINES, ...AIRLINES].map((airline, i) => (
+              <div key={i} className="airline-pill">
+                <Plane style={{ width: "12px", height: "12px", color: T.teal }} />
+                {airline}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* ═══════════════════════════════════
+          STATS
+      ═══════════════════════════════════ */}
+      <section className="stats-section" style={{ padding: "32px 24px", background: T.bg }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <div className="stats-grid-inner" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", borderRadius: "20px", overflow: "hidden", border: `1px solid ${T.border}`, gap: "1px", background: T.border }}>
+            {STATS.map(({ value, label }, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="stat-card stat-card-inner"
+                style={{ textAlign: "center", padding: "32px 16px", background: T.white }}
+              >
+                <p style={{ fontSize: "38px", fontWeight: 900, letterSpacing: "-0.04em", color: T.teal }}>{value}</p>
+                <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: T.muted, marginTop: "4px" }}>{label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════
+          DESTINATIONS (tabbed)
+      ═══════════════════════════════════ */}
+      <section style={{ padding: "80px 32px", background: T.bg }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <SectionLabel>Our Flight Services</SectionLabel>
+            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 900, letterSpacing: "-0.03em", color: T.navy, lineHeight: 1.1 }}>
+              Where Do You Want<br />
+              <span style={{ color: T.teal }}>to Fly?</span>
+            </h2>
+            <p style={{ marginTop: "14px", fontSize: "15px", fontWeight: 300, color: T.muted, maxWidth: "480px", margin: "14px auto 0" }}>
+              Whether it's a quick hop to Pokhara or a long-haul to Dubai, we've got every route covered.
+            </p>
+
+            {/* Tabs */}
+            <div style={{ marginTop: "28px", display: "inline-flex", padding: "4px", borderRadius: "100px", background: T.white, border: `1px solid ${T.border}` }}>
+              {(["national", "international"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  className="tab-btn"
+                  onClick={() => setActiveTab(tab)}
+                  style={activeTab === tab ? { background: T.teal, color: "white" } : { background: "transparent", color: T.muted }}
+                >
+                  {tab === "national" ? "🇳🇵 National" : "🌍 International"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Cards */}
+          {activeTab === "national" && (
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
+              <div className="dest-grid-inner" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "28px" }}>
+                {NAT_DESTINATIONS.map((d, i) => (
+                  <motion.div
+                    key={d.code}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.055 }}
+                    className="dest-card dest-card-inner"
+                    style={{ borderRadius: "18px", padding: "22px 18px", background: T.white, border: `1px solid ${T.border}`, cursor: "pointer" }}
+                  >
+                    <div style={{ width: "38px", height: "38px", borderRadius: "10px", background: T.tealLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "14px" }}>
+                      <Mountain style={{ width: "18px", height: "18px", color: T.teal }} />
+                    </div>
+                    <p style={{ fontSize: "22px", fontWeight: 900, letterSpacing: "-0.03em", color: T.navy }}>{d.code}</p>
+                    <p style={{ fontSize: "13px", fontWeight: 600, marginTop: "2px", color: T.navyMid }}>{d.city}</p>
+                    <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "8px", color: T.muted }}>{d.tag}</p>
+                    <div className="dest-arrow" style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "10px", fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: T.teal }}>
+                      Book Now <ChevronRight style={{ width: "12px", height: "12px" }} />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <button className="ghost-btn" onClick={() => doWhatsApp("National Flight Booking")}>
+                  <Plane style={{ width: "14px", height: "14px" }} /> View All Domestic Routes
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === "international" && (
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
+              <div className="dest-grid-inner" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "28px" }}>
+                {INTL_DESTINATIONS.map((d, i) => (
+                  <motion.div
+                    key={d.code}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.055 }}
+                    className="dest-card dest-card-inner"
+                    style={{ borderRadius: "18px", padding: "22px 18px", background: T.white, border: `1px solid ${T.border}`, cursor: "pointer" }}
+                  >
+                    <div style={{ width: "38px", height: "38px", borderRadius: "10px", background: T.tealLight, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "14px" }}>
+                      <Globe style={{ width: "18px", height: "18px", color: T.teal }} />
+                    </div>
+                    <p style={{ fontSize: "22px", fontWeight: 900, letterSpacing: "-0.03em", color: T.navy }}>{d.code}</p>
+                    <p style={{ fontSize: "13px", fontWeight: 600, marginTop: "2px", color: T.navyMid }}>{d.city}</p>
+                    <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "8px", color: T.muted }}>{d.country}</p>
+                    <div className="dest-arrow" style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "10px", fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: T.teal }}>
+                      Enquire <ChevronRight style={{ width: "12px", height: "12px" }} />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <button className="ghost-btn" onClick={() => doWhatsApp("International Flight Booking")}>
+                  <Globe style={{ width: "14px", height: "14px" }} /> View All International Routes
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════
+          HOW IT WORKS
+      ═══════════════════════════════════ */}
+      <section style={{ padding: "80px 32px", background: T.navy }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "56px" }}>
+            <p style={{ fontSize: "10px", fontWeight: 800, letterSpacing: "0.3em", textTransform: "uppercase", color: T.teal, marginBottom: "14px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
+              <span style={{ width: "20px", height: "2px", background: T.teal, display: "inline-block" }} />Simple Process<span style={{ width: "20px", height: "2px", background: T.teal, display: "inline-block" }} />
+            </p>
+            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 900, letterSpacing: "-0.03em", color: T.white, lineHeight: 1.1 }}>
+              Book Your Flight<br />
+              <span style={{ color: T.teal }}>In 3 Easy Steps</span>
+            </h2>
+          </div>
+
+          <div className="steps-grid-inner" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px", position: "relative" }}>
+            {/* Dashed connector */}
+            <div className="step-connector" style={{ position: "absolute", top: "36px", left: "calc(16.66% + 16px)", right: "calc(16.66% + 16px)", height: "1px", borderTop: `2px dashed rgba(7,157,154,0.25)`, pointerEvents: "none" }} />
+
+            {STEPS.map(({ n, icon: Icon, title, desc }, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+                style={{ textAlign: "center" }}
+              >
+                <div style={{ position: "relative", display: "inline-flex", marginBottom: "22px" }}>
+                  <div style={{ width: "64px", height: "64px", borderRadius: "18px", background: T.teal, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", zIndex: 10 }}>
+                    <Icon style={{ width: "28px", height: "28px", color: "white" }} />
+                  </div>
+                  <span style={{ position: "absolute", top: "-10px", right: "-10px", width: "26px", height: "26px", borderRadius: "50%", background: T.navy, border: `2px solid ${T.teal}`, color: T.teal, fontSize: "9px", fontWeight: 900, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 20 }}>
+                    {n}
+                  </span>
+                </div>
+                <h3 style={{ fontSize: "17px", fontWeight: 700, color: T.white, marginBottom: "10px" }}>{title}</h3>
+                <p style={{ fontSize: "13px", fontWeight: 300, lineHeight: 1.65, color: "#8fafc0", maxWidth: "240px", margin: "0 auto" }}>{desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "52px" }}>
+            <button className="teal-btn" style={{ fontSize: "12px" }} onClick={() => doWhatsApp("Flight Booking")}>
+              Start Booking Now <ArrowRight style={{ width: "15px", height: "15px" }} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+      {/* ═══════════════════════════════════
+          CTA BANNER
+      ═══════════════════════════════════ */}
+
+
+      <br /><br /><br /><br />
+      <section style={{ padding: "0 24px 80px", background: T.bg }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div className="cta-panel-inner" style={{ borderRadius: "28px", overflow: "hidden", padding: "64px", background: `linear-gradient(135deg, ${T.navy} 0%, ${T.navyMid} 100%)`, display: "flex", gap: "56px", alignItems: "center" }}>
+            <div className="cta-left" style={{ flex: 1 }}>
+              <Badge>
+                <Users style={{ width: "12px", height: "12px" }} /> Talk to a Real Agent
+              </Badge>
+              <h2 style={{ marginTop: "20px", marginBottom: "16px", fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 900, letterSpacing: "-0.03em", color: T.white, lineHeight: 1.1 }}>
+                Ready to Book<br />
+                <span style={{ color: T.teal }}>Your Next Flight?</span>
+              </h2>
+              <p style={{ fontSize: "15px", fontWeight: 300, lineHeight: 1.7, color: "#8fafc0", maxWidth: "420px" }}>
+                Skip the confusing booking portals. Message us on WhatsApp and our team will find your best options — national or international — in minutes.
+              </p>
+              <div className="cta-left-btns" style={{ display: "flex", gap: "14px", marginTop: "32px", flexWrap: "wrap" }}>
+                <button className="teal-btn" onClick={() => doWhatsApp("National Flight")}>
+                  🇳🇵 Book Domestic
+                </button>
+                <button className="teal-btn" style={{ background: "rgba(7,157,154,0.18)", color: T.teal }} onClick={() => doWhatsApp("International Flight")}>
+                  🌍 Book International
+                </button>
+              </div>
+            </div>
+
+            {/* Contact box */}
+            <div className="cta-right" style={{ flexShrink: 0, width: "300px", borderRadius: "20px", padding: "28px", background: "rgba(255,255,255,0.055)", border: "1px solid rgba(7,157,154,0.2)" }}>
+              <p style={{ fontSize: "10px", fontWeight: 800, letterSpacing: "0.25em", textTransform: "uppercase", color: T.teal, marginBottom: "22px" }}>
+                Contact Us Directly
+              </p>
+              {[
+                { icon: PhoneCall, label: "WhatsApp", value: "+977 984-1743706" },
+                { icon: MapPin, label: "Office", value: "Milan Chowk,Baneswor" },
+                { icon: Clock, label: "Hours", value: "7AM – 9PM, Every Day" },
+              ].map(({ icon: Icon, label, value }) => (
+                <div key={label} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "18px" }}>
+                  <div style={{ width: "34px", height: "34px", borderRadius: "10px", background: "rgba(7,157,154,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Icon style={{ width: "15px", height: "15px", color: T.teal }} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.15em", color: "#4a6880" }}>{label}</p>
+                    <p style={{ fontSize: "13px", fontWeight: 600, color: T.white }}>{value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+    </main>
+  );
 }

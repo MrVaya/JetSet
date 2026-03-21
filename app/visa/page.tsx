@@ -39,13 +39,13 @@ export default function VisaPage() {
                 </div>
 
                 {/* The Action Box */}
-                <div className="bg-slate-900 rounded-[2.5rem] p-10 md:p-16 text-white relative overflow-hidden">
+                <div className="  bg-[#079d9a] rounded-[2.5rem] p-10 md:p-16 text-white relative overflow-hidden">
                     <div className="relative z-10">
                         <h2 className="text-3xl font-bold mb-4">Start Your Application</h2>
                         <p className="text-slate-400 mb-8 max-w-sm mx-auto">Get a free 10-minute consultation on WhatsApp regarding your documentation.</p>
                         <Button
                             onClick={handleWhatsApp}
-                            className="bg-[#079d9a] hover:bg-[#068a87] text-white h-16 px-10 rounded-2xl font-bold uppercase tracking-widest text-xs"
+                            className="bg-white text-[#079d9a] hover:bg-[#079d9a] text-black h-16 px-10 rounded-2xl font-bold uppercase tracking-widest text-xs"
                         >
                             Consult an Expert <MessageSquare className="ml-2 h-4 w-4" />
                         </Button>

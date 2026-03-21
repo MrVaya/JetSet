@@ -73,18 +73,18 @@ export default function PopularDestinations() {
             </div>
 
             {/* 6-Card Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-10">
                 {DESTINATIONS.map((item) => (
-                    <div key={item.title} className="flex flex-col gap-4">
+                    <div key={item.title} className="flex flex-col gap-5">
                         <div
-                            className="group relative overflow-hidden rounded-[2.5rem] bg-slate-900 border border-slate-100 aspect-[4/5] shadow-lg"
+                            className="group relative overflow-hidden rounded-[3rem] bg-slate-900 border border-slate-100 aspect-[4/5] shadow-xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] hover:-translate-y-3"
                         >
                             {/* Image Component */}
                             <Image
                                 src={item.img}
                                 alt={item.title}
                                 fill
-                                className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-70 group-hover:opacity-90"
+                                className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-75 group-hover:opacity-100"
                             />
 
                             {/* Overlays */}

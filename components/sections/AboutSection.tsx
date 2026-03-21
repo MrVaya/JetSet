@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const stats = [
     { label: "Flight Destinations", val: "50+" },
@@ -16,34 +18,49 @@ export default function AboutSection() {
                 <div className="relative flex items-center justify-center h-[500px] md:h-[600px]">
 
                     {/* Image 1: Far Left (Tallest) */}
-                    <div className="relative w-[140px] md:w-[200px] h-[80%] rounded-full overflow-hidden border-8 border-white shadow-2xl z-10 transition-transform hover:scale-105 duration-500">
+                    <motion.div
+                        initial={{ y: 0 }}
+                        animate={{ y: [0, -20, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                        className="relative w-[140px] md:w-[200px] h-[80%] rounded-full overflow-hidden border-8 border-white shadow-2xl z-10 transition-transform hover:scale-105 duration-500"
+                    >
                         <Image
                             src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&q=80"
                             alt="Traveler with luggage"
                             fill
                             className="object-cover"
                         />
-                    </div>
+                    </motion.div>
 
                     {/* Image 2: Middle (Lower) */}
-                    <div className="relative w-[140px] md:w-[200px] h-[60%] rounded-full overflow-hidden border-8 border-white shadow-2xl z-20 -ml-12 mt-32 transition-transform hover:scale-105 duration-500">
+                    <motion.div
+                        initial={{ y: 0 }}
+                        animate={{ y: [0, 25, 0] }}
+                        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                        className="relative w-[140px] md:w-[200px] h-[60%] rounded-full overflow-hidden border-8 border-white shadow-2xl z-20 -ml-12 mt-32 transition-transform hover:scale-105 duration-500"
+                    >
                         <Image
                             src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80"
                             alt="Boat on clear water"
                             fill
                             className="object-cover"
                         />
-                    </div>
+                    </motion.div>
 
                     {/* Image 3: Far Right (Higher) */}
-                    <div className="relative w-[140px] md:w-[200px] h-[70%] rounded-full overflow-hidden border-8 border-white shadow-2xl z-0 -ml-12 -mt-20 transition-transform hover:scale-105 duration-500">
+                    <motion.div
+                        initial={{ y: 0 }}
+                        animate={{ y: [0, -15, 0] }}
+                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                        className="relative w-[140px] md:w-[200px] h-[70%] rounded-full overflow-hidden border-8 border-white shadow-2xl z-0 -ml-12 -mt-20 transition-transform hover:scale-105 duration-500"
+                    >
                         <Image
                             src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80"
                             alt="Beautiful mountain lake"
                             fill
                             className="object-cover"
                         />
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* RIGHT SIDE: CONTENT & STATS */}
@@ -61,14 +78,21 @@ export default function AboutSection() {
                     {/* Stats Grid (2x2) */}
                     <div className="grid grid-cols-2 gap-y-12 gap-x-8">
                         {stats.map((stat, index) => (
-                            <div key={index} className="flex flex-col">
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1, duration: 0.5 }}
+                                className="flex flex-col"
+                            >
                                 <span className="text-4xl font-bold text-[#2a6a62] mb-2 tracking-tighter">
                                     {stat.val}
                                 </span>
                                 <span className="text-sm font-semibold text-slate-400 uppercase tracking-tight max-w-[150px]">
                                     {stat.label}
                                 </span>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
